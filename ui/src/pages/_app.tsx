@@ -5,9 +5,8 @@ import { WagmiConfig, configureChains, createClient } from "wagmi";
 import type { AppProps } from "next/app";
 import { polygonMumbai, goerli } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
-import theme from "./theme";
-
+import { ChakraProvider } from "@chakra-ui/react";
+import theme from "../config/theme";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { chains, provider } = configureChains(
