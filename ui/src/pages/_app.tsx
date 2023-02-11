@@ -5,6 +5,7 @@ import { WagmiConfig, configureChains, createClient } from "wagmi";
 import type { AppProps } from "next/app";
 import { polygonMumbai, goerli } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
+import { ChakraProvider } from '@chakra-ui/react'
 
 export default function App({ Component, pageProps }: AppProps) {
   const { chains, provider } = configureChains(
@@ -24,10 +25,12 @@ export default function App({ Component, pageProps }: AppProps) {
   });
 
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains} initialChain={goerli}>
-        <Component {...pageProps} />
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <ChakraProvider>
+      <WagmiConfig client={wagmiClient}>
+        <RainbowKitProvider chains={chains} initialChain={goerli}>
+          <Component {...pageProps} />
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </ChakraProvider>
   );
 }
