@@ -60,6 +60,7 @@ const CustomLayout = ({ children }: IProp) => {
           width={200}
           style={{ background: colorBgContainer }}
           theme="dark"
+          collapsible
         >
           <Menu
             mode="inline"
