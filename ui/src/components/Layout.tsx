@@ -3,18 +3,26 @@ import {
   LaptopOutlined,
   NotificationOutlined,
   UserOutlined,
+  DashboardOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Layout, Menu, theme } from "antd";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { Typography } from "antd";
 
+const { Title } = Typography;
 const { Header, Content, Sider } = Layout;
 
-const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}));
+const optionNames = [
+  "Dashboard",
+  "Register Company",
+  "Register Employee",
+  "Pension",
+];
 
+// TODO ->  Edit the icons according to the above options
 const items2: MenuProps["items"] = [
+  DashboardOutlined,
   UserOutlined,
   LaptopOutlined,
   NotificationOutlined,
@@ -22,17 +30,9 @@ const items2: MenuProps["items"] = [
   const key: String = String(index + 1);
 
   return {
-    key: `sub${key}`,
+    key: `${key}`,
     icon: React.createElement(icon),
-    label: `subnav ${key}`,
-
-    children: new Array(4).fill(null).map((_, j) => {
-      const subKey: number = index * 4 + j + 1;
-      return {
-        key: subKey,
-        label: `option${subKey}`,
-      };
-    }),
+    label: optionNames[index],
   };
 });
 
@@ -47,13 +47,22 @@ const CustomLayout = ({ children }: IProp) => {
   return (
     <Layout style={{ height: "100vh", overflowY: "clip" }}>
       <Header className="header">
-        <div className="logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          items={items1}
-        />
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "0 10px",
+            height: "100%",
+          }}
+        >
+          {/* TODO -> MAKE IT MOBILE RESPONSIVE */}
+          <Title style={{ color: "white", marginTop: 3 }} level={2}>
+            Pension Flow
+          </Title>
+          <ConnectButton showBalance accountStatus={"address"} />
+        </div>
       </Header>
       <Layout>
         <Sider
@@ -64,14 +73,14 @@ const CustomLayout = ({ children }: IProp) => {
         >
           <Menu
             mode="inline"
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
+            // defaultSelectedKeys={["1"]}
+            defaultOpenKeys={["1"]}
             style={{ height: "100%", borderRight: 0 }}
             items={items2}
             theme="dark"
           />
         </Sider>
-        <Layout style={{ padding: "0 24px 24px" }}>
+        <Layout style={{ padding: "20px", overflowY: "auto" }}>
           <Content
             style={{
               padding: 24,

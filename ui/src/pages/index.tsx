@@ -1,35 +1,32 @@
 import React from "react";
-import { Button, Modal } from "antd";
+import LottieAnimation from "@/components/Lottie";
+import investmentLottie from "@/assets/animations/investment.json";
+import { Typography } from "antd";
+const { Title } = Typography;
+
 export default function Home() {
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button>
-      <Modal
-        title="Basic Modal"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
+      <Title style={{ textAlign: "center" }}>Welcome to the Pension Flow</Title>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Modal>
+        <p style={{ textAlign: "center", color: "black", width: "50%" }}>
+          A pension flow is a flow of money from your employer to your pension
+          fund. We present a decentralised solution that can make the pension
+          system easy and transparent.
+        </p>
+      </div>
+      <LottieAnimation
+        lottieData={investmentLottie}
+        height={"60%"}
+        width={"30%"}
+      />
     </>
   );
 }
