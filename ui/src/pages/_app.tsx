@@ -26,12 +26,12 @@ export default function App({ Component, pageProps }: AppProps) {
   });
 
   return (
-    <CustomLayout>
-      <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains} initialChain={goerli}>
+    <WagmiConfig client={wagmiClient}>
+      <RainbowKitProvider chains={chains} initialChain={goerli}>
+        <CustomLayout>
           <Component {...pageProps} />
-        </RainbowKitProvider>
-      </WagmiConfig>
-    </CustomLayout>
+        </CustomLayout>
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }
