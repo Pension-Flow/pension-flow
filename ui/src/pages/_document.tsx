@@ -1,6 +1,4 @@
-import { ColorModeScript } from "@chakra-ui/react";
 import { Html, Head, Main, NextScript } from "next/document";
-import theme from "../config/theme";
 
 export default function Document() {
   return (
@@ -10,7 +8,6 @@ export default function Document() {
         <link rel="apple-touch-icon" href="/icon.png"></link>
       </Head>
       <body>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <Main />
         <NextScript />
       </body>
