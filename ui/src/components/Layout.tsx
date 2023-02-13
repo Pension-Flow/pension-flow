@@ -59,7 +59,7 @@ const CustomLayout = ({ children }: IProp) => {
           {/* TODO -> MAKE IT MOBILE RESPONSIVE */}
           <Title style={{ color: "white", marginTop: 3 }} level={2}>
             Pension Flow
-          </Title>  
+          </Title>
           <ConnectButton showBalance accountStatus={"address"} />
         </div>
       </Header>
@@ -86,6 +86,7 @@ const CustomLayout = ({ children }: IProp) => {
               margin: 0,
               minHeight: 280,
               background: colorBgContainer,
+              overflow: "scroll",
             }}
           >
             {children}
