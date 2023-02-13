@@ -1,5 +1,7 @@
 import Head from "next/head";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import LoginForm from "@/components/LoginForm";
+import { Tabs } from "antd";
+import SignupForm from "@/components/SignupForm";
 
 export default function Home() {
   return (
@@ -10,7 +12,18 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <ConnectButton showBalance accountStatus={"address"} />
+        <Tabs
+          size="large"
+          defaultActiveKey="1"
+          style={{ width: "30vw", margin: "2% auto 10%" }}
+        >
+          <Tabs.TabPane tab="Login" key="1">
+            <LoginForm />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Sign Up" key="2">
+            <SignupForm />
+          </Tabs.TabPane>
+        </Tabs>
       </main>
     </>
   );

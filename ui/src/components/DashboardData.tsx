@@ -1,5 +1,6 @@
 import React from "react";
-import { Typography } from "antd";
+import { Card, Typography } from "antd";
+
 const { Title } = Typography;
 
 interface IDataProps {
@@ -11,16 +12,16 @@ interface IDataProps {
 
 const DashboardData = ({ data }: IDataProps) => {
   return (
-    <>
-      <div style={{display:'flex', flexDirection:"column", justifyContent:'space-evenly', alignItems:'center', backgroundColor: '#8dc5f8', padding: '10px 20px', borderRadius:10, width: '25%'}}>
-        <div className="data__upper">
-            <Title level={4}>{data.name}</Title>
-        </div>
-        <div className="data__lower">
-            <Title level={4}>{data.value}</Title>
-        </div>
-      </div>
-    </>
+    <Card
+      hoverable
+      style={{
+        width: 250,
+        backgroundColor: "white",
+      }}
+    >
+      <Title level={4}>{data.name}</Title>
+      <Title level={2}>{data.value}</Title>
+    </Card>
   );
 };
 

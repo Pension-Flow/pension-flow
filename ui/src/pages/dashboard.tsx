@@ -11,20 +11,20 @@ const data = [
     value: "$10",
   },
   {
-    name: "Total Employers",
+    name: "Total Employees",
     value: "1000",
   },
   {
     name: "Total Profit",
-    value: "10.45%"
-  }
+    value: "10.45%",
+  },
 ];
 const Dashboard = () => {
   return (
     <>
-        <div className={styles.timer__wrapper}>
-            <Title level={2}>Add Timer Here</Title>
-        </div>
+      <div className={styles.timer__wrapper}>
+        <Title level={2}>Add Timer Here</Title>
+      </div>
       <div className={styles.main__wrapper}>
         <div className={styles.main__left__wrapper}>
           <div className={styles.mid__wrapper}>
