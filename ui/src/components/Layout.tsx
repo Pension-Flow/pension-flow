@@ -53,14 +53,13 @@ const CustomLayout = ({ children }: IProp) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            padding: "0 10px",
             height: "100%",
           }}
         >
           {/* TODO -> MAKE IT MOBILE RESPONSIVE */}
           <Title style={{ color: "white", marginTop: 3 }} level={2}>
             Pension Flow
-          </Title>
+          </Title>  
           <ConnectButton showBalance accountStatus={"address"} />
         </div>
       </Header>
