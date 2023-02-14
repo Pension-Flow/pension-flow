@@ -4,16 +4,20 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
+import "@chainlink/contracts/src/v0.8/AutomationCompatible.sol";
+
 error EmployeeAlreadyExists();
 
 /**
  * @title Company
  * @dev This contract is used to store the details of a company and the pension details of its employees
  */
-contract Company is Initializable, OwnableUpgradeable {
+contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInterface {
     string public name;
     mapping(address => Employee) public employees;
     address[] public employeeAddresses;
+
+    uint public lastPensionTimeStamp;
 
     struct Employee {
         uint256 pensionStartDate;
@@ -38,6 +42,32 @@ contract Company is Initializable, OwnableUpgradeable {
         __Ownable_init();
         transferOwnership(_owner);
         name = _name;
+    }
+
+    /**
+     * @dev This function is used to check if the upkeep chainlink automation is needed
+     * @param checkData The data used to check if the upkeep is needed
+     */
+    function checkUpkeep(
+        bytes calldata checkData
+    )
+        external
+        view
+        override
+        returns (bool upkeepNeeded, bytes memory /* performData */)
+    {
+        upkeepNeeded = (block.timestamp - lastPensionTimeStamp) > 2592000;
+    }
+
+    /**
+     * @dev This function is used to perform the upkeep chainlink automation
+     * @param performData The data used to perform the upkeep
+     */
+    function performUpkeep(bytes calldata performData) external override {
+        if ((block.timestamp - lastPensionTimeStamp) > 2592000) {
+            lastPensionTimeStamp = block.timestamp;
+        }
+        // AKHILESH - THE MONTHLY PENSION PAYMENT CODE COMES HERE
     }
 
     /**
