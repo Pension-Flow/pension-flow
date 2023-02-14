@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@chainlink/contracts/src/v0.8/AutomationCompatible.sol";
 
 error EmployeeAlreadyExists();
-
+error InsufficientFunds();
 /**
  * @title Company
  * @dev This contract is used to store the details of a company and the pension details of its employees
@@ -15,7 +15,7 @@ error EmployeeAlreadyExists();
 contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInterface {
     string public name;
     mapping(address => Employee) public employees;
-    address[] public employeeAddresses;
+    address payable[] public employeeAddresses;
 
     uint public lastPensionTimeStamp;
 
@@ -26,7 +26,7 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
         uint256 employeeJoiningDate;
         uint256 employeeLeavingDate;
         uint256 minimumServiceRequired;
-        bool employeeActive;
+        // bool employeeActive;
     }
 
     /**
@@ -68,7 +68,32 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
             lastPensionTimeStamp = block.timestamp;
         }
         // AKHILESH - THE MONTHLY PENSION PAYMENT CODE COMES HERE
+        transferFundsToEmployees();
     }
+
+    /**
+     * @dev This function is used to transfer funds to employess, its called automatically by performUpKeep
+     */
+
+    function transferFundsToEmployees() internal{
+        uint256 amountToDistribute = 0;
+        for(uint i = 0; i < employeeAddresses.length; i++) {
+            //distribute pension to employees who have retired only
+            if(employees[employeeAddresses[i]].employeeLeavingDate - employees[employeeAddresses[i]].employeeJoiningDate >= employees[employeeAddresses[i]].minimumServiceRequired)
+                amountToDistribute += employees[employeeAddresses[i]].monthyAmount;
+        }
+        if(address(this).balance <= amountToDistribute){
+            revert InsufficientFunds();
+        }
+        //Transfer funds
+        for(uint i = 0; i < employeeAddresses.length; i++){
+            if(employees[employeeAddresses[i]].employeeLeavingDate - employees[employeeAddresses[i]].employeeJoiningDate >= employees[employeeAddresses[i]].minimumServiceRequired)
+                employeeAddresses[i].transfer(employees[employeeAddresses[i]].monthyAmount);
+        }
+
+    }
+
+    
 
     /**
      * @dev This function is used to change the name of the company
@@ -87,7 +112,7 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
      * @param _employeeJoiningDate The date on which the employee joined the company
      * @param _employeeLeavingDate The date on which the employee left the company
      * @param _minimumServiceRequired The minimum service required by the employee to be eligible for pension
-     * @param _employeeActive Whether the employee is active or not
+     * 
      */
     function addEmployee(
         address _employeeAddress,
@@ -96,21 +121,21 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
         uint256 _monthyAmount,
         uint256 _employeeJoiningDate,
         uint256 _employeeLeavingDate,
-        uint256 _minimumServiceRequired,
-        bool _employeeActive
+        uint256 _minimumServiceRequired
+        // bool _employeeActive
     ) public onlyOwner {
         if (employees[_employeeAddress].employeeJoiningDate > 0)
             revert EmployeeAlreadyExists();
+        
         employees[_employeeAddress] = Employee(
             _pensionStartDate,
             _pensionDuration,
             _monthyAmount,
             _employeeJoiningDate,
             _employeeLeavingDate,
-            _minimumServiceRequired,
-            _employeeActive
+            _minimumServiceRequired
         );
-        employeeAddresses.push(_employeeAddress);
+        employeeAddresses.push(payable(_employeeAddress));
     }
 
     /**
@@ -139,16 +164,15 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
                 revert EmployeeAlreadyExists();
         }
         for (uint256 i = 0; i < _employeeAddresses.length; i++) {
+            employeeAddresses.push(payable(_employeeAddresses[i]));
             employees[_employeeAddresses[i]] = Employee(
                 _pensionStartDates[i],
                 _pensionDurations[i],
                 _monthyAmounts[i],
                 _employeeJoiningDates[i],
                 _employeeLeavingDates[i],
-                _minimumServiceRequireds[i],
-                _employeeActives[i]
+                _minimumServiceRequireds[i]
             );
-            employeeAddresses.push(_employeeAddresses[i]);
         }
     }
 
@@ -190,7 +214,7 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
      * @param _employeeJoiningDate The date on which the employee joined the company
      * @param _employeeLeavingDate The date on which the employee left the company
      * @param _minimumServiceRequired The minimum service required by the employee to be eligible for pension
-     * @param _employeeActive Whether the employee is active or not
+     *
      */
     function updateEmployee(
         address _employeeAddress,
@@ -199,8 +223,8 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
         uint256 _monthyAmount,
         uint256 _employeeJoiningDate,
         uint256 _employeeLeavingDate,
-        uint256 _minimumServiceRequired,
-        bool _employeeActive
+        uint256 _minimumServiceRequired
+        // bool _employeeActive
     ) public onlyOwner {
         employees[_employeeAddress] = Employee(
             _pensionStartDate,
@@ -208,8 +232,7 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
             _monthyAmount,
             _employeeJoiningDate,
             _employeeLeavingDate,
-            _minimumServiceRequired,
-            _employeeActive
+            _minimumServiceRequired
         );
     }
 }
