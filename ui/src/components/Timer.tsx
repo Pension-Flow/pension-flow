@@ -1,28 +1,6 @@
-import Head from "next/head";
 import React from "react";
-import { Button, Modal, Col } from "reactstrap";
-function CompanyDashboard() {
-  return (
-    <>
-      <Head>
-        <title>Dashboard</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main>
-        <div
-          style={{
-            paddingLeft: "100px",
-            paddingRight: "100px",
-            paddingTop: "50px",
-          }}
-        >
-          <Timer />
-        </div>
-      </main>
-    </>
-  );
-}
+import { Button, Modal } from "antd";
+import styles from "@/styles/component-styles/timer.module.css";
 
 const Timer = () => {
   const [days, setDays] = React.useState(0);
@@ -50,9 +28,9 @@ const Timer = () => {
 
   return (
     <div
-      className="timer"
+      className={styles.timer}
       role="timer"
-      style={{ display: "flex", justifyContent: "space-between" }}
+      style={{ display: "flex", justifyContent: "space-between", color:'black' }}
     >
       <div className="col-4" style={{ width: "20%", float: "left" }}>
         <div className="box">
@@ -78,27 +56,12 @@ const Timer = () => {
           <p id="second">{seconds < 10 ? "0" + seconds : seconds}</p>
         </div>
       </div>
-      <div
-        className="col-4"
-        style={{
-          width: "20%",
-          float: "left",
-          margin: "auto",
-          border: "3px solid green",
-          textAlign: "center",
-        }}
-      >
+      <div>
         <div
           className="button"
           style={{ alignContent: "center", padding: "10px" }}
         >
-          <Button
-            block
-            className=" mb-3"
-            color="primary"
-            onClick={() => setModalDefaultOpen(true)}
-            type="button"
-          >
+          <Button onClick={() => setModalDefaultOpen(true)} type="primary">
             Default
           </Button>
           {newFunction(modalDefaultOpen, setModalDefaultOpen)}
@@ -108,47 +71,15 @@ const Timer = () => {
   );
 };
 
-export default CompanyDashboard;
+export default Timer;
+
 function newFunction(
   modalDefaultOpen: boolean,
   setModalDefaultOpen: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   return (
-    <Modal
-      isOpen={modalDefaultOpen}
-      toggle={() => setModalDefaultOpen(false)}
-      style={{ backgroundColor: "black" }}
-    >
-      <div className=" modal-header">
-        <h6 className=" modal-title" id="modal-title-default">
-          Type your modal title
-        </h6>
-        <button
-          aria-label="Close"
-          className=" close"
-          onClick={() => setModalDefaultOpen(false)}
-          type="button"
-        >
-          <span aria-hidden={true}>×</span>
-        </button>
-      </div>
-      <div className=" modal-body">
-        <p>This is a Modal whose content I have to edit</p>
-        <p>Description give little</p>
-      </div>
-      <div className=" modal-footer">
-        <Button color="primary" type="button">
-          Save changes
-        </Button>
-        <Button
-          className=" ml-auto"
-          color="link"
-          onClick={() => setModalDefaultOpen(false)}
-          type="button"
-        >
-          Close
-        </Button>
-      </div>
+    <Modal open={modalDefaultOpen} onCancel={() => setModalDefaultOpen(false)}>
+      <p>Some contents...</p>
     </Modal>
   );
 }

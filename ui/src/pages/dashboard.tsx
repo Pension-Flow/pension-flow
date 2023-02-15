@@ -2,6 +2,7 @@ import React from "react";
 import { Typography } from "antd";
 import styles from "@/styles/page-styles/dashboard.module.css";
 import DashboardData from "@/components/DashboardData";
+import Timer from "@/components/Timer";
 
 const { Title } = Typography;
 
@@ -23,7 +24,7 @@ const Dashboard = () => {
   return (
     <>
       <div className={styles.timer__wrapper}>
-        <Title level={2}>Add Timer Here</Title>
+        <Timer />
       </div>
       <div className={styles.main__wrapper}>
         <div className={styles.main__left__wrapper}>
