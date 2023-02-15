@@ -82,7 +82,7 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
             if(employees[employeeAddresses[i]].employeeLeavingDate - employees[employeeAddresses[i]].employeeJoiningDate >= employees[employeeAddresses[i]].minimumServiceRequired)
                 amountToDistribute += employees[employeeAddresses[i]].monthyAmount;
         }
-        if(address(this).balance <= amountToDistribute){
+        if(address(this).balance < amountToDistribute){
             revert InsufficientFunds();
         }
         //Transfer funds
