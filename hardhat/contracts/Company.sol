@@ -14,6 +14,7 @@ error InsufficientFunds();
  */
 contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInterface {
     string public name;
+    uint256 private upkeepID;
     mapping(address => Employee) public employees;
     address payable[] public employeeAddresses;
 
@@ -34,7 +35,7 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
      * @param _owner The owner of the contract
      * @param _name The name of the company
      */
-    function initialize(address _owner, string memory _name)
+    function initialize(address _owner, string memory _name, uint256 _upkeepID)
         public
         payable
         initializer
@@ -42,6 +43,7 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
         __Ownable_init();
         transferOwnership(_owner);
         name = _name;
+        upkeepID = _upkeepID;
     }
 
     /**

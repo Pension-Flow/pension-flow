@@ -62,14 +62,14 @@ contract CompanyFactory {
     */
     function registerAndPredictID(
         string memory name,
-        bytes calldata encryptedEmail,
+        bytes memory encryptedEmail,
         address upkeepContract,
         uint32 gasLimit,
         address adminAddress,
-        bytes calldata checkData,
+        bytes memory checkData,
         uint96 amount,
         uint8 source
-    ) public {
+    ) public returns(uint256) {
         (State memory state, Config memory _c, address[] memory _k) = i_registry
             .getState();
         uint256 oldNonce = state.nonce;
@@ -102,6 +102,9 @@ contract CompanyFactory {
                     )
                 )
             );
+            
+            // storing the upkeepID in the company contract
+            return upkeepID;
         } else {
             revert("auto-approve disabled");
         }
@@ -117,13 +120,26 @@ contract CompanyFactory {
         returns (address)
     {
         if (msg.value <= 0) revert NoEtherSent();
+        
         address clone = Clones.clone(companyTemplate);
-        Company(clone).initialize{value: msg.value}(msg.sender, _name);
+        
+        // register the company with chainlink automation
+        uint256 _upkeepID = registerAndPredictID(
+            _name,
+            "0x",
+            clone,
+            100000,
+            msg.sender,
+            "0x",
+            5000000000000000000,
+            0
+        );
+
+        Company(clone).initialize{value: msg.value}(msg.sender, _name, _upkeepID);
+
         companies.push(clone);
         companyCount++;
         emit CompanyCreated(clone);
-
-        // MADHUR: register the company with chainlink automation
 
         return clone;
     }
