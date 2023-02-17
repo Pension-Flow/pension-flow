@@ -51,7 +51,12 @@ contract CompanyFactory {
     ) {
         companyTemplate = address(new Company());
 
-        i_link = _link;
+        // polygon mumbai
+        // link - 0x326C977E6efc84E512bB9C30f76E30c160eD06FB 
+        // registrar - 	0xDb8e8e2ccb5C033938736aa89Fe4fa1eDfD15a1d
+        // registry - 0x02777053d6764996e594c3E88AF1D58D5363a2e6
+    
+        i_link = _link; 
         registrar = _registrar;
         i_registry = _registry;
     }
