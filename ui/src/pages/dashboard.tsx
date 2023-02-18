@@ -3,6 +3,7 @@ import { Typography } from "antd";
 import styles from "@/styles/page-styles/dashboard.module.css";
 import DashboardData from "@/components/DashboardData";
 import Timer from "@/components/Timer";
+import DataFeed from "@/components/DataFeed";
 
 const { Title } = Typography;
 
@@ -35,9 +36,10 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="main__right__wrapper">
-          {/* TODO DISPLAY THE EMPOYEE LIST */}
+          {/* TODO DISPLAY THE EMPLOYEE LIST */}
         </div>
       </div>
+      <DataFeed fromCurrency="ETH" />
     </>
   );
 };
