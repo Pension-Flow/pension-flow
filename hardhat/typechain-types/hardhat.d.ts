@@ -13,34 +13,6 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
-      name: "AutomationBase",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AutomationBase__factory>;
-    getContractFactory(
-      name: "AutomationCompatible",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AutomationCompatible__factory>;
-    getContractFactory(
-      name: "AutomationCompatibleInterface",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AutomationCompatibleInterface__factory>;
-    getContractFactory(
-      name: "AutomationRegistryBaseInterface",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AutomationRegistryBaseInterface__factory>;
-    getContractFactory(
-      name: "AutomationRegistryExecutableInterface",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AutomationRegistryExecutableInterface__factory>;
-    getContractFactory(
-      name: "AutomationRegistryInterface",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AutomationRegistryInterface__factory>;
-    getContractFactory(
-      name: "LinkTokenInterface",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.LinkTokenInterface__factory>;
-    getContractFactory(
       name: "OwnableUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OwnableUpgradeable__factory>;
@@ -53,57 +25,122 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ContextUpgradeable__factory>;
     getContractFactory(
+      name: "AccessControl",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AccessControl__factory>;
+    getContractFactory(
+      name: "IAccessControl",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IAccessControl__factory>;
+    getContractFactory(
+      name: "GovernorCountingSimple",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.GovernorCountingSimple__factory>;
+    getContractFactory(
+      name: "GovernorSettings",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.GovernorSettings__factory>;
+    getContractFactory(
+      name: "GovernorTimelockControl",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.GovernorTimelockControl__factory>;
+    getContractFactory(
+      name: "GovernorVotes",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.GovernorVotes__factory>;
+    getContractFactory(
+      name: "GovernorVotesQuorumFraction",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.GovernorVotesQuorumFraction__factory>;
+    getContractFactory(
+      name: "IGovernorTimelock",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IGovernorTimelock__factory>;
+    getContractFactory(
+      name: "Governor",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Governor__factory>;
+    getContractFactory(
+      name: "IGovernor",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IGovernor__factory>;
+    getContractFactory(
+      name: "TimelockController",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TimelockController__factory>;
+    getContractFactory(
+      name: "IVotes",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IVotes__factory>;
+    getContractFactory(
+      name: "IERC1155Receiver",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC1155Receiver__factory>;
+    getContractFactory(
+      name: "ERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20__factory>;
+    getContractFactory(
+      name: "ERC20Permit",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20Permit__factory>;
+    getContractFactory(
+      name: "IERC20Permit",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20Permit__factory>;
+    getContractFactory(
+      name: "ERC20Votes",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20Votes__factory>;
+    getContractFactory(
+      name: "IERC20Metadata",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20Metadata__factory>;
+    getContractFactory(
+      name: "IERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20__factory>;
+    getContractFactory(
+      name: "IERC721Receiver",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721Receiver__factory>;
+    getContractFactory(
+      name: "ERC165",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC165__factory>;
+    getContractFactory(
+      name: "IERC165",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC165__factory>;
+    getContractFactory(
+      name: "DoubleEndedQueue",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DoubleEndedQueue__factory>;
+    getContractFactory(
       name: "Company",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Company__factory>;
+    getContractFactory(
+      name: "CompanyDAO",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.CompanyDAO__factory>;
     getContractFactory(
       name: "CompanyFactory",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CompanyFactory__factory>;
     getContractFactory(
-      name: "KeeperRegistrarInterface",
+      name: "GovernanceToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.KeeperRegistrarInterface__factory>;
+    ): Promise<Contracts.GovernanceToken__factory>;
     getContractFactory(
       name: "Lock",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Lock__factory>;
+    getContractFactory(
+      name: "TimeLock",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TimeLock__factory>;
 
-    getContractAt(
-      name: "AutomationBase",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AutomationBase>;
-    getContractAt(
-      name: "AutomationCompatible",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AutomationCompatible>;
-    getContractAt(
-      name: "AutomationCompatibleInterface",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AutomationCompatibleInterface>;
-    getContractAt(
-      name: "AutomationRegistryBaseInterface",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AutomationRegistryBaseInterface>;
-    getContractAt(
-      name: "AutomationRegistryExecutableInterface",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AutomationRegistryExecutableInterface>;
-    getContractAt(
-      name: "AutomationRegistryInterface",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AutomationRegistryInterface>;
-    getContractAt(
-      name: "LinkTokenInterface",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.LinkTokenInterface>;
     getContractAt(
       name: "OwnableUpgradeable",
       address: string,
@@ -120,25 +157,150 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ContextUpgradeable>;
     getContractAt(
+      name: "AccessControl",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.AccessControl>;
+    getContractAt(
+      name: "IAccessControl",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IAccessControl>;
+    getContractAt(
+      name: "GovernorCountingSimple",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.GovernorCountingSimple>;
+    getContractAt(
+      name: "GovernorSettings",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.GovernorSettings>;
+    getContractAt(
+      name: "GovernorTimelockControl",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.GovernorTimelockControl>;
+    getContractAt(
+      name: "GovernorVotes",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.GovernorVotes>;
+    getContractAt(
+      name: "GovernorVotesQuorumFraction",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.GovernorVotesQuorumFraction>;
+    getContractAt(
+      name: "IGovernorTimelock",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IGovernorTimelock>;
+    getContractAt(
+      name: "Governor",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Governor>;
+    getContractAt(
+      name: "IGovernor",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IGovernor>;
+    getContractAt(
+      name: "TimelockController",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TimelockController>;
+    getContractAt(
+      name: "IVotes",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IVotes>;
+    getContractAt(
+      name: "IERC1155Receiver",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC1155Receiver>;
+    getContractAt(
+      name: "ERC20",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC20>;
+    getContractAt(
+      name: "ERC20Permit",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC20Permit>;
+    getContractAt(
+      name: "IERC20Permit",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20Permit>;
+    getContractAt(
+      name: "ERC20Votes",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC20Votes>;
+    getContractAt(
+      name: "IERC20Metadata",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20Metadata>;
+    getContractAt(
+      name: "IERC20",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20>;
+    getContractAt(
+      name: "IERC721Receiver",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC721Receiver>;
+    getContractAt(
+      name: "ERC165",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC165>;
+    getContractAt(
+      name: "IERC165",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC165>;
+    getContractAt(
+      name: "DoubleEndedQueue",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.DoubleEndedQueue>;
+    getContractAt(
       name: "Company",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Company>;
+    getContractAt(
+      name: "CompanyDAO",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.CompanyDAO>;
     getContractAt(
       name: "CompanyFactory",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.CompanyFactory>;
     getContractAt(
-      name: "KeeperRegistrarInterface",
+      name: "GovernanceToken",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.KeeperRegistrarInterface>;
+    ): Promise<Contracts.GovernanceToken>;
     getContractAt(
       name: "Lock",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Lock>;
+    getContractAt(
+      name: "TimeLock",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TimeLock>;
 
     // default types
     getContractFactory(

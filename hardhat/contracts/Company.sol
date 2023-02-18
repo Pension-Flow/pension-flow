@@ -3,6 +3,11 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts/governance/Governor.sol";
+
+import "./CompanyDAO.sol";
+import "./GovernanceToken.sol";
+import "./TimeLock.sol";
 
 error EmployeeAlreadyExists();
 error InsufficientFunds();
@@ -12,12 +17,13 @@ error InsufficientFunds();
  * @dev This contract is used to store the details of a company and the pension details of its employees
  */
 contract Company is Initializable, OwnableUpgradeable {
-    string public name;
+    string public companyName;
     mapping(address => Employee) public employees;
-    address payable[] public employeeAddresses;
+    address[] public employeeAddresses;
+    CompanyDAO public companyDAO;
 
     uint256 internal lastDistributionTime;
-    uint public pensionCounter;
+    uint256 public pensionCounter;
 
     event CompanyPensionTransferSucceeded(
         address indexed company,
@@ -32,25 +38,29 @@ contract Company is Initializable, OwnableUpgradeable {
         uint256 employeeJoiningDate;
         uint256 employeeLeavingDate;
         uint256 minimumServiceRequired;
-        // bool employeeActive;
     }
 
     /**
      * @dev This function is used to initialize the contract
      * @param _owner The owner of the contract
-     * @param _name The name of the company
+     * @param _companyName The name of the company
      */
-    function initialize(address _owner, string memory _name)
+    function initialize(address _owner, string memory _companyName)
         public
         payable
         initializer
     {
         __Ownable_init();
         transferOwnership(_owner);
-        name = _name;
+        companyName = _companyName;
 
         lastDistributionTime = block.timestamp;
-        pensionCounter=0;
+        pensionCounter = 0;
+
+        companyDAO = new CompanyDAO(
+            new GovernanceToken(),
+            new TimeLock(1, new address[](0), new address[](0), address(this))
+        );
     }
 
     /**
@@ -61,7 +71,7 @@ contract Company is Initializable, OwnableUpgradeable {
 
         uint256 interval = 2629056; // 1 month in seconds
         // uint256 interval = 60; // for dev
-        
+
         // Check if it is time to distribute funds
         if (block.timestamp >= lastDistributionTime + interval) {
             for (uint256 i = 0; i < employeeAddresses.length; i++) {
@@ -80,7 +90,6 @@ contract Company is Initializable, OwnableUpgradeable {
                 revert InsufficientFunds();
             }
 
-
             // Transfer funds
             for (uint256 i = 0; i < employeeAddresses.length; i++) {
                 if (
@@ -88,7 +97,7 @@ contract Company is Initializable, OwnableUpgradeable {
                         employees[employeeAddresses[i]].employeeJoiningDate >=
                     employees[employeeAddresses[i]].minimumServiceRequired
                 )
-                    employeeAddresses[i].transfer(
+                    payable(employeeAddresses[i]).transfer(
                         employees[employeeAddresses[i]].monthyAmount
                     );
             }
@@ -99,17 +108,17 @@ contract Company is Initializable, OwnableUpgradeable {
             );
 
             // Update the last distribution time
-            pensionCounter=pensionCounter+1;
+            pensionCounter = pensionCounter + 1;
             lastDistributionTime = block.timestamp;
         }
     }
 
     /**
      * @dev This function is used to change the name of the company
-     * @param _name The new name of the company
+     * @param _companyName The new name of the company
      */
-    function changeName(string memory _name) public onlyOwner {
-        name = _name;
+    function changeName(string memory _companyName) public onlyOwner {
+        companyName = _companyName;
     }
 
     /**
@@ -131,11 +140,7 @@ contract Company is Initializable, OwnableUpgradeable {
         uint256 _employeeJoiningDate,
         uint256 _employeeLeavingDate,
         uint256 _minimumServiceRequired
-    )
-        public
-        // bool _employeeActive
-        onlyOwner
-    {
+    ) public onlyOwner {
         if (employees[_employeeAddress].employeeJoiningDate > 0)
             revert EmployeeAlreadyExists();
 
@@ -159,7 +164,6 @@ contract Company is Initializable, OwnableUpgradeable {
      * @param _employeeJoiningDates The dates on which the employees joined the company
      * @param _employeeLeavingDates The dates on which the employees left the company
      * @param _minimumServiceRequireds The minimum service required by the employees to be eligible for pension
-     * @param _employeeActives Whether the employees are active or not
      */
     function addEmployees(
         address[] memory _employeeAddresses,
@@ -168,8 +172,7 @@ contract Company is Initializable, OwnableUpgradeable {
         uint256[] memory _monthyAmounts,
         uint256[] memory _employeeJoiningDates,
         uint256[] memory _employeeLeavingDates,
-        uint256[] memory _minimumServiceRequireds,
-        bool[] memory _employeeActives
+        uint256[] memory _minimumServiceRequireds
     ) public onlyOwner {
         for (uint256 i = 0; i < _employeeAddresses.length; i++) {
             if (employees[_employeeAddresses[i]].employeeJoiningDate > 0)
@@ -226,7 +229,6 @@ contract Company is Initializable, OwnableUpgradeable {
      * @param _employeeJoiningDate The date on which the employee joined the company
      * @param _employeeLeavingDate The date on which the employee left the company
      * @param _minimumServiceRequired The minimum service required by the employee to be eligible for pension
-     *
      */
     function updateEmployee(
         address _employeeAddress,
@@ -236,11 +238,7 @@ contract Company is Initializable, OwnableUpgradeable {
         uint256 _employeeJoiningDate,
         uint256 _employeeLeavingDate,
         uint256 _minimumServiceRequired
-    )
-        public
-        // bool _employeeActive
-        onlyOwner
-    {
+    ) public onlyOwner {
         employees[_employeeAddress] = Employee(
             _pensionStartDate,
             _pensionDuration,
@@ -249,5 +247,72 @@ contract Company is Initializable, OwnableUpgradeable {
             _employeeLeavingDate,
             _minimumServiceRequired
         );
+    }
+
+    /**
+     * @dev This function is used to cast a vote for a proposal
+     * @param _proposalId The id of the proposal
+     * @param support The support for the proposal
+     * @return balance
+     */
+    function castVote(uint256 _proposalId, uint8 support)
+        public
+        returns (uint256)
+    {
+        return companyDAO.castVote(_proposalId, support);
+    }
+
+    /**
+     * @dev This function is used to execute a proposal
+     * @param _proposalId The id of the proposal
+     * @param values The values of the proposal
+     * @param calldatas The calldatas of the proposal
+     * @param descriptionHash The descriptionHash of the proposal
+     */
+    function executeProposal(
+        uint256 _proposalId,
+        uint256[] memory values,
+        bytes[] memory calldatas,
+        bytes32 descriptionHash
+    ) public onlyOwner {
+        companyDAO.executeProposal(
+            _proposalId,
+            employeeAddresses,
+            values,
+            calldatas,
+            descriptionHash
+        );
+    }
+
+    /**
+     * @dev This function is used to propose a new proposal
+     * @param values The values of the proposal
+     * @param calldatas The calldatas of the proposal
+     * @param description The description of the proposal
+     */
+    function propose(
+        uint256[] memory values,
+        bytes[] memory calldatas,
+        string memory description
+    ) public onlyOwner returns (uint256) {
+        return
+            companyDAO.propose(
+                employeeAddresses,
+                values,
+                calldatas,
+                description
+            );
+    }
+
+    /**
+     * @dev This function is used to get the state of a proposal
+     * @param proposalId The id of the proposal
+     */
+    function getState(uint256 proposalId)
+        public
+        view
+        returns (IGovernor.ProposalState)
+    {
+        return companyDAO.state(proposalId);
     }
 }
