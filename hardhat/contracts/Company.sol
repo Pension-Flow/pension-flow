@@ -4,20 +4,26 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-import "@chainlink/contracts/src/v0.8/AutomationCompatible.sol";
-
 error EmployeeAlreadyExists();
 error InsufficientFunds();
+
 /**
  * @title Company
  * @dev This contract is used to store the details of a company and the pension details of its employees
  */
-contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInterface {
+contract Company is Initializable, OwnableUpgradeable {
     string public name;
     mapping(address => Employee) public employees;
     address payable[] public employeeAddresses;
 
-    uint public lastPensionTimeStamp;
+    uint256 internal lastDistributionTime;
+    uint public pensionCounter;
+
+    event CompanyPensionTransferSucceeded(
+        address indexed company,
+        uint256 amount
+    );
+    event CompanyPensionTransferFailed(address indexed company);
 
     struct Employee {
         uint256 pensionStartDate;
@@ -42,58 +48,61 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
         __Ownable_init();
         transferOwnership(_owner);
         name = _name;
-    }
 
-    /**
-     * @dev This function is used to check if the upkeep chainlink automation is needed
-     * @param checkData The data used to check if the upkeep is needed
-     */
-    function checkUpkeep(
-        bytes calldata checkData
-    )
-        external
-        view
-        override
-        returns (bool upkeepNeeded, bytes memory /* performData */)
-    {
-        upkeepNeeded = (block.timestamp - lastPensionTimeStamp) > 2592000;
-    }
-
-    /**
-     * @dev This function is used to perform the upkeep chainlink automation
-     * @param performData The data used to perform the upkeep
-     */
-    function performUpkeep(bytes calldata performData) external override {
-        if ((block.timestamp - lastPensionTimeStamp) > 2592000) {
-            lastPensionTimeStamp = block.timestamp;
-        }
-        // AKHILESH - THE MONTHLY PENSION PAYMENT CODE COMES HERE
-        transferFundsToEmployees();
+        lastDistributionTime = block.timestamp;
+        pensionCounter=0;
     }
 
     /**
      * @dev This function is used to transfer funds to employess, its called automatically by performUpKeep
      */
-
-    function transferFundsToEmployees() internal{
+    function transferFundsToEmployees() external {
         uint256 amountToDistribute = 0;
-        for(uint i = 0; i < employeeAddresses.length; i++) {
-            //distribute pension to employees who have retired only
-            if(employees[employeeAddresses[i]].employeeLeavingDate - employees[employeeAddresses[i]].employeeJoiningDate >= employees[employeeAddresses[i]].minimumServiceRequired)
-                amountToDistribute += employees[employeeAddresses[i]].monthyAmount;
-        }
-        if(address(this).balance < amountToDistribute){
-            revert InsufficientFunds();
-        }
-        //Transfer funds
-        for(uint i = 0; i < employeeAddresses.length; i++){
-            if(employees[employeeAddresses[i]].employeeLeavingDate - employees[employeeAddresses[i]].employeeJoiningDate >= employees[employeeAddresses[i]].minimumServiceRequired)
-                employeeAddresses[i].transfer(employees[employeeAddresses[i]].monthyAmount);
-        }
 
+        uint256 interval = 2629056; // 1 month in seconds
+        // uint256 interval = 60; // for dev
+        
+        // Check if it is time to distribute funds
+        if (block.timestamp >= lastDistributionTime + interval) {
+            for (uint256 i = 0; i < employeeAddresses.length; i++) {
+                // distribute pension to employees who have retired only
+                if (
+                    employees[employeeAddresses[i]].employeeLeavingDate -
+                        employees[employeeAddresses[i]].employeeJoiningDate >=
+                    employees[employeeAddresses[i]].minimumServiceRequired
+                )
+                    amountToDistribute += employees[employeeAddresses[i]]
+                        .monthyAmount;
+            }
+
+            if (address(this).balance < amountToDistribute) {
+                emit CompanyPensionTransferFailed(address(this));
+                revert InsufficientFunds();
+            }
+
+
+            // Transfer funds
+            for (uint256 i = 0; i < employeeAddresses.length; i++) {
+                if (
+                    employees[employeeAddresses[i]].employeeLeavingDate -
+                        employees[employeeAddresses[i]].employeeJoiningDate >=
+                    employees[employeeAddresses[i]].minimumServiceRequired
+                )
+                    employeeAddresses[i].transfer(
+                        employees[employeeAddresses[i]].monthyAmount
+                    );
+            }
+
+            emit CompanyPensionTransferSucceeded(
+                address(this),
+                amountToDistribute
+            );
+
+            // Update the last distribution time
+            pensionCounter=pensionCounter+1;
+            lastDistributionTime = block.timestamp;
+        }
     }
-
-    
 
     /**
      * @dev This function is used to change the name of the company
@@ -112,7 +121,7 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
      * @param _employeeJoiningDate The date on which the employee joined the company
      * @param _employeeLeavingDate The date on which the employee left the company
      * @param _minimumServiceRequired The minimum service required by the employee to be eligible for pension
-     * 
+     *
      */
     function addEmployee(
         address _employeeAddress,
@@ -122,11 +131,14 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
         uint256 _employeeJoiningDate,
         uint256 _employeeLeavingDate,
         uint256 _minimumServiceRequired
+    )
+        public
         // bool _employeeActive
-    ) public onlyOwner {
+        onlyOwner
+    {
         if (employees[_employeeAddress].employeeJoiningDate > 0)
             revert EmployeeAlreadyExists();
-        
+
         employees[_employeeAddress] = Employee(
             _pensionStartDate,
             _pensionDuration,
@@ -224,8 +236,11 @@ contract Company is Initializable, OwnableUpgradeable, AutomationCompatibleInter
         uint256 _employeeJoiningDate,
         uint256 _employeeLeavingDate,
         uint256 _minimumServiceRequired
+    )
+        public
         // bool _employeeActive
-    ) public onlyOwner {
+        onlyOwner
+    {
         employees[_employeeAddress] = Employee(
             _pensionStartDate,
             _pensionDuration,
