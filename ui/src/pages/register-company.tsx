@@ -2,6 +2,8 @@ import Head from "next/head";
 import LoginForm from "@/components/LoginForm";
 import { Tabs } from "antd";
 import SignupForm from "@/components/SignupForm";
+import ShowInvestCard from "@/components/ShowInvestCard";
+import ShowInvestmentDetails from "@/components/ShowInvestmentDetails";
 
 export default function Home() {
   return (
@@ -22,6 +24,21 @@ export default function Home() {
           </Tabs.TabPane>
           <Tabs.TabPane tab="Sign Up" key="2">
             <SignupForm />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Card Test" key="3">
+            <ShowInvestCard
+              title="Test 1"
+              content="Content 1"
+              deadline="deadline 1"
+            ></ShowInvestCard>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Details Component Test" key="4">
+            <ShowInvestmentDetails
+              title="Test 1"
+              content="Content 1"
+              deadline="deadline 1"
+              amount="100000"
+            ></ShowInvestmentDetails>
           </Tabs.TabPane>
         </Tabs>
       </main>
