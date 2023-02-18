@@ -57,9 +57,12 @@ contract Company is Initializable, OwnableUpgradeable {
         lastDistributionTime = block.timestamp;
         pensionCounter = 0;
 
+        address[] memory governors;
+        governors[0] = _owner;
+
         companyDAO = new CompanyDAO(
             new GovernanceToken(),
-            new TimeLock(1, new address[](0), new address[](0), address(this))
+            new TimeLock(1, governors, governors, _owner)
         );
     }
 
