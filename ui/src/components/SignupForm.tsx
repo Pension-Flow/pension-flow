@@ -11,17 +11,22 @@ import {
 } from "antd";
 import { UserOutlined, InboxOutlined } from "@ant-design/icons";
 import { useCompany } from "@/hooks/useCompany";
+import { useCompanyFactory } from "@/hooks/useCompanyFactory";
 
 const SignupForm = () => {
   const [form] = Form.useForm();
   const [employeeList, setEmployeeList] = useState<UploadFile<any> | File>();
-  const { companyContract, uploadCsv } = useCompany();
+  const { createCompany } = useCompanyFactory();
+  const { uploadCsv, addAddress } = useCompany();
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     console.log(values);
     console.log(employeeList);
-    if (employeeList) uploadCsv(employeeList);
-    else
+    if (employeeList) {
+      const companyAddress = await createCompany(values.name);
+      addAddress(companyAddress);
+      await uploadCsv(employeeList);
+    } else
       notification.error({
         message: "Error",
         description: "Please upload employee list",

@@ -5,8 +5,8 @@ pragma abicoder v2;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-import '@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol';
-import '@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol';
+import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
+import "@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol";
 
 error EmployeeAlreadyExists();
 error InsufficientFunds();
@@ -37,6 +37,7 @@ struct W2wProposal {
     uint256 approvalCount; // number of yes
     mapping(address => bool) votes; // mapping for the people who have voted
 }
+
 /**
  * @title Company
  * @dev This contract is used to store the details of a company and the pension details of its employees
@@ -186,7 +187,9 @@ contract Company is Initializable, OwnableUpgradeable {
         uint256 _value,
         address _currencyAddress
     ) public onlyOwner {
-        CryptoProposal storage newRequest = cryptoProposals[noOfCryptoProposals++];
+        CryptoProposal storage newRequest = cryptoProposals[
+            noOfCryptoProposals++
+        ];
         newRequest.description = _description;
         newRequest.value = _value;
         newRequest.currencyAddress = _currencyAddress;
@@ -251,12 +254,12 @@ contract Company is Initializable, OwnableUpgradeable {
      * @dev This function is used to finalize a crypto proposal
      * @param proposalIndex The index of the proposal to be finalized
      */
-    function finalizeCryptoProposal(uint proposalIndex) public onlyOwner{
+    function finalizeCryptoProposal(uint256 proposalIndex) public onlyOwner {
         CryptoProposal storage currProposal = cryptoProposals[proposalIndex];
 
-        require(currProposal.approvalCount > (employeeAddresses.length/2));
+        require(currProposal.approvalCount > (employeeAddresses.length / 2));
 
-        require(!currProposal.complete);       
+        require(!currProposal.complete);
 
         // TODO: swap tokens
         // swapTokens(currProposal.value, currProposal.currencyAddress);
@@ -268,12 +271,12 @@ contract Company is Initializable, OwnableUpgradeable {
      * @dev This function is used to finalize a w2w proposal
      * @param proposalIndex The index of the proposal to be finalized
      */
-    function finalizeW2wProposal(uint proposalIndex) public onlyOwner{
+    function finalizeW2wProposal(uint256 proposalIndex) public onlyOwner {
         W2wProposal storage currProposal = w2wProposals[proposalIndex];
 
-        require(currProposal.approvalCount > (employeeAddresses.length/2));
+        require(currProposal.approvalCount > (employeeAddresses.length / 2));
 
-        require(!currProposal.complete);       
+        require(!currProposal.complete);
 
         currProposal.targetAddress.transfer(currProposal.value);
 
@@ -387,7 +390,6 @@ contract Company is Initializable, OwnableUpgradeable {
      * @param _employeeJoiningDates The dates on which the employees joined the company
      * @param _employeeLeavingDates The dates on which the employees left the company
      * @param _minimumServiceRequireds The minimum service required by the employees to be eligible for pension
-     * @param _employeeActives Whether the employees are active or not
      */
     function addEmployees(
         address[] memory _employeeAddresses,
