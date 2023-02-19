@@ -20,7 +20,10 @@ export default function Home() {
           {/* <Tabs.TabPane tab="Login" key="1">
             <LoginForm />
           </Tabs.TabPane> */}
-          <Tabs.TabPane tab="Register Your Company" key="2">
+          <Tabs.TabPane tab="Register Your Company" key="1">
+            <SignupForm />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Register Your Company" key="1">
             <SignupForm />
           </Tabs.TabPane>
         </Tabs>
