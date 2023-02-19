@@ -7,7 +7,7 @@ const { Title } = Typography;
 export default function Home() {
   return (
     <>
-      <Title style={{ textAlign: "center" }}>Welcome to the Pension Flow</Title>
+      <Title style={{ textAlign: "center" }}>Welcome to Pension Flow</Title>
       <div
         style={{
           width: "100%",
@@ -16,7 +16,7 @@ export default function Home() {
           alignItems: "center",
         }}
       >
-        <p style={{ textAlign: "center", color: "black", width: "50%" }}>
+        <p style={{ textAlign: "center", color: "black", width: "60%", fontSize:17 }}>
           A pension flow is a flow of money from your employer to your pension
           fund. We present a decentralised solution that can make the pension
           system easy and transparent.
@@ -24,8 +24,8 @@ export default function Home() {
       </div>
       <LottieAnimation
         lottieData={investmentLottie}
-        height={"60%"}
-        width={"30%"}
+        height={"75%"}
+        width={"40%"}
       />
     </>
   );

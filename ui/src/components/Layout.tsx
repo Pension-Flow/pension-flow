@@ -10,6 +10,7 @@ import { Layout, Menu, theme, Button } from "antd";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Typography } from "antd";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const { Title } = Typography;
 const { Header, Content, Sider } = Layout;
@@ -60,7 +61,7 @@ const CustomLayout = ({ children }: IProp) => {
 
   return (
     <Layout style={{ height: "100vh", overflowY: "clip" }}>
-      <Header className="header">
+      <Header className="header" style={{ padding: "35px 20px" }}>
         <div
           style={{
             width: "100%",
@@ -70,10 +71,11 @@ const CustomLayout = ({ children }: IProp) => {
             height: "100%",
           }}
         >
-          {/* TODO -> MAKE IT MOBILE RESPONSIVE */}
-          <Title style={{ color: "white", marginTop: 3 }} level={2}>
-            Pension Flow
-          </Title>
+          <Link href="/">
+            <Title style={{ color: "white", marginTop: 8 }} level={2}>
+              Pension Flow
+            </Title>
+          </Link>
           <div style={{ display: "flex", alignItems: "center" }}>
             <Button
               type="primary"

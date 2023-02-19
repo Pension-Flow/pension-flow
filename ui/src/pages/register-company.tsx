@@ -1,10 +1,5 @@
 import Head from "next/head";
-import LoginForm from "@/components/LoginForm";
-import { Tabs } from "antd";
 import SignupForm from "@/components/SignupForm";
-import ShowInvestCard from "@/components/ShowInvestCard";
-import ShowInvestmentDetails from "@/components/ShowInvestmentDetails";
-import InvestForm from "./InvestForm";
 import { Content } from "antd/es/layout/layout";
 
 export default function Home() {
