@@ -43,7 +43,7 @@ const CustomLayout = ({ children }: IProp) => {
     UserOutlined,
     DashboardOutlined,
     LaptopOutlined,
-    // NotificationOutlined,
+    NotificationOutlined,
   ].map((icon, index) => {
     const key: String = String(index + 1);
 
@@ -115,7 +115,7 @@ const CustomLayout = ({ children }: IProp) => {
       </Header>
       <Layout>
         <Sider
-          width={230}
+          width={250}
           style={{ background: colorBgContainer }}
           theme="dark"
           collapsible

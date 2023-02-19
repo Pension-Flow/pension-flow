@@ -1,6 +1,10 @@
+import { Content } from "antd/es/layout/layout";
+import { Typography } from "antd";
+import { Tabs } from "antd";
+const { Title } = Typography;
+
 import Head from "next/head";
 import SignupForm from "@/components/SignupForm";
-import { Content } from "antd/es/layout/layout";
 
 export default function Home() {
   return (
@@ -11,7 +15,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Content style={{ width: "40vw", margin: "2% auto 10%" }}>
+        <Content style={{ width: "40vw", margin: "0 auto" }}>
+          <Title style={{ textAlign: "center" }}>Register Company</Title>
           <SignupForm />
         </Content>
       </main>

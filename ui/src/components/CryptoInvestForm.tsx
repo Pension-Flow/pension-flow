@@ -11,9 +11,9 @@ import {
   Dropdown,
   Space,
   MenuProps,
+  DatePickerProps,
 } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 const currencySymbols = [
@@ -37,27 +37,39 @@ const items: MenuProps["items"] = currencySymbols.map((symbol, index) => {
 });
 
 function CryptoInvestForm() {
+  const [title, setTitle] = React.useState<string>("");
   const [currencySymbol, setCurrencySymbol] = React.useState<string>(
     currencySymbols[0]
   );
   const [amount, setAmount] = React.useState<number>(0);
-  // const [votingPeriod, setVotingPeriod] = React.useState<string[]>([]);
+  const [deadlineVote, setDeadlineVote] = React.useState<string>("");
   const [proposal, setProposal] = React.useState<string>("");
 
   const onClick = ({ key }: any) => {
     setCurrencySymbol(currencySymbols[key]);
   };
 
+  const onDateChange: DatePickerProps["onChange"] = (date, dateString) => {
+    console.log(date, dateString);
+  };
+
   return (
     <div style={{ width: "100%", marginTop: "20px" }}>
       <Form>
-        <Form.Item label="Currency/Token to invest into ">
-          <Dropdown menu={{ items, onClick }} trigger={["click"]}>
-            <Space>
-              {currencySymbol}
-              <DownOutlined />
-            </Space>
-          </Dropdown>
+        <Form.Item label="Title">
+          <Input
+            onChange={(val: any) => {
+              setTitle(val);
+            }}
+          />
+        </Form.Item>
+        <Form.Item label="Proposal">
+          <TextArea
+            rows={5}
+            onChange={(event: any) => {
+              setProposal(event.target.value);
+            }}
+          />
         </Form.Item>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Form.Item label="Amount to be invested ">
@@ -67,19 +79,25 @@ function CryptoInvestForm() {
               }}
             />
           </Form.Item>
-          {/* <Form.Item label="Voting Period ">
-            <RangePicker />
-          </Form.Item> */}
+          <Form.Item label="Deadline to Vote ">
+            <DatePicker onChange={onDateChange} />
+          </Form.Item>
         </div>
-        <Form.Item label="Proposal">
-          <TextArea
-            rows={5}
-            onChange={(event: any) => {
-              setProposal(event.target.value);
-            }}
-          />
+        <Form.Item label="Currency/Token to invest into ">
+          <Dropdown menu={{ items, onClick }} trigger={["click"]}>
+            <Space>
+              {currencySymbol}
+              <DownOutlined />
+            </Space>
+          </Dropdown>
         </Form.Item>
-        <Form.Item>
+        <Form.Item
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Button>Submit Proposal</Button>
         </Form.Item>
       </Form>
