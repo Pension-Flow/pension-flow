@@ -73,7 +73,15 @@ const CustomLayout = ({ children }: IProp) => {
           <Title style={{ color: "white", marginTop: 3 }} level={2}>
             Pension Flow
           </Title>
-          <ConnectButton showBalance accountStatus={"address"} />
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Button type="primary" htmlType="submit" style={{}}>
+              Login as employee
+            </Button>
+            <Button type="primary" htmlType="submit" style={{ margin: 10 }}>
+              Login as Company admin
+            </Button>
+            <ConnectButton showBalance accountStatus={"address"} />
+          </div>
         </div>
       </Header>
       <Layout>
@@ -86,26 +94,10 @@ const CustomLayout = ({ children }: IProp) => {
           <Menu
             mode="inline"
             defaultOpenKeys={["1"]}
-            style={{ height: "83.5%", borderRight: 0 }}
+            style={{ height: "100%", borderRight: 0 }}
             items={items2}
             theme="dark"
           ></Menu>
-          <div style={{ background: "#001529" }}>
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={{ marginRight: "3%", marginTop: "0.8rem" }}
-            >
-              Login as employee
-            </Button>
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={{ marginRight: "3%", marginTop: "0.8rem" }}
-            >
-              Login as Company admin
-            </Button>
-          </div>
         </Sider>
         <Layout style={{ padding: "20px", overflowY: "auto" }}>
           <Content
