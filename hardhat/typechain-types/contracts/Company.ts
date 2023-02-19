@@ -28,49 +28,54 @@ import type {
   PromiseOrValue,
 } from "../common";
 
-export declare namespace Company {
-  export type EmployeeStruct = {
-    pensionStartDate: PromiseOrValue<BigNumberish>;
-    pensionDuration: PromiseOrValue<BigNumberish>;
-    monthyAmount: PromiseOrValue<BigNumberish>;
-    employeeJoiningDate: PromiseOrValue<BigNumberish>;
-    employeeLeavingDate: PromiseOrValue<BigNumberish>;
-    minimumServiceRequired: PromiseOrValue<BigNumberish>;
-  };
+export type EmployeeStruct = {
+  pensionStartDate: PromiseOrValue<BigNumberish>;
+  pensionDuration: PromiseOrValue<BigNumberish>;
+  monthyAmount: PromiseOrValue<BigNumberish>;
+  employeeJoiningDate: PromiseOrValue<BigNumberish>;
+  employeeLeavingDate: PromiseOrValue<BigNumberish>;
+  minimumServiceRequired: PromiseOrValue<BigNumberish>;
+};
 
-  export type EmployeeStructOutput = [
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber
-  ] & {
-    pensionStartDate: BigNumber;
-    pensionDuration: BigNumber;
-    monthyAmount: BigNumber;
-    employeeJoiningDate: BigNumber;
-    employeeLeavingDate: BigNumber;
-    minimumServiceRequired: BigNumber;
-  };
-}
+export type EmployeeStructOutput = [
+  BigNumber,
+  BigNumber,
+  BigNumber,
+  BigNumber,
+  BigNumber,
+  BigNumber
+] & {
+  pensionStartDate: BigNumber;
+  pensionDuration: BigNumber;
+  monthyAmount: BigNumber;
+  employeeJoiningDate: BigNumber;
+  employeeLeavingDate: BigNumber;
+  minimumServiceRequired: BigNumber;
+};
 
 export interface CompanyInterface extends utils.Interface {
   functions: {
     "addEmployee(address,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
-    "addEmployees(address[],uint256[],uint256[],uint256[],uint256[],uint256[],uint256[],bool[])": FunctionFragment;
+    "addEmployees(address[],uint256[],uint256[],uint256[],uint256[],uint256[],uint256[])": FunctionFragment;
+    "approveCryptoProposal(uint256)": FunctionFragment;
+    "approveW2wProposal(uint256)": FunctionFragment;
     "changeName(string)": FunctionFragment;
-    "checkUpkeep(bytes)": FunctionFragment;
+    "createCryptoProposal(string,uint256,address)": FunctionFragment;
+    "createW2wProposal(string,uint256,address)": FunctionFragment;
     "employeeAddresses(uint256)": FunctionFragment;
     "employees(address)": FunctionFragment;
+    "finalizeCryptoProposal(uint256)": FunctionFragment;
+    "finalizeW2wProposal(uint256)": FunctionFragment;
     "getEmployee(address)": FunctionFragment;
     "getEmployees()": FunctionFragment;
     "initialize(address,string)": FunctionFragment;
-    "lastPensionTimeStamp()": FunctionFragment;
+    "isAddressInEmployee(address)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
-    "performUpkeep(bytes)": FunctionFragment;
+    "pensionCounter()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "swapRouter()": FunctionFragment;
+    "transferFundsToEmployees()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "updateEmployee(address,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
@@ -79,18 +84,25 @@ export interface CompanyInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "addEmployee"
       | "addEmployees"
+      | "approveCryptoProposal"
+      | "approveW2wProposal"
       | "changeName"
-      | "checkUpkeep"
+      | "createCryptoProposal"
+      | "createW2wProposal"
       | "employeeAddresses"
       | "employees"
+      | "finalizeCryptoProposal"
+      | "finalizeW2wProposal"
       | "getEmployee"
       | "getEmployees"
       | "initialize"
-      | "lastPensionTimeStamp"
+      | "isAddressInEmployee"
       | "name"
       | "owner"
-      | "performUpkeep"
+      | "pensionCounter"
       | "renounceOwnership"
+      | "swapRouter"
+      | "transferFundsToEmployees"
       | "transferOwnership"
       | "updateEmployee"
   ): FunctionFragment;
@@ -116,17 +128,36 @@ export interface CompanyInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>[],
       PromiseOrValue<BigNumberish>[],
       PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<boolean>[]
+      PromiseOrValue<BigNumberish>[]
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "approveCryptoProposal",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "approveW2wProposal",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "changeName",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "checkUpkeep",
-    values: [PromiseOrValue<BytesLike>]
+    functionFragment: "createCryptoProposal",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createW2wProposal",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "employeeAddresses",
@@ -135,6 +166,14 @@ export interface CompanyInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "employees",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "finalizeCryptoProposal",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "finalizeW2wProposal",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "getEmployee",
@@ -149,17 +188,25 @@ export interface CompanyInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "lastPensionTimeStamp",
-    values?: undefined
+    functionFragment: "isAddressInEmployee",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "performUpkeep",
-    values: [PromiseOrValue<BytesLike>]
+    functionFragment: "pensionCounter",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "swapRouter",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferFundsToEmployees",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -187,9 +234,21 @@ export interface CompanyInterface extends utils.Interface {
     functionFragment: "addEmployees",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "approveCryptoProposal",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "approveW2wProposal",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "changeName", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "checkUpkeep",
+    functionFragment: "createCryptoProposal",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "createW2wProposal",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -197,6 +256,14 @@ export interface CompanyInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "employees", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "finalizeCryptoProposal",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "finalizeW2wProposal",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getEmployee",
     data: BytesLike
@@ -207,17 +274,22 @@ export interface CompanyInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "lastPensionTimeStamp",
+    functionFragment: "isAddressInEmployee",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "performUpkeep",
+    functionFragment: "pensionCounter",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "swapRouter", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferFundsToEmployees",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -230,13 +302,96 @@ export interface CompanyInterface extends utils.Interface {
   ): Result;
 
   events: {
+    "CompanyPensionTransferFailed(address)": EventFragment;
+    "CompanyPensionTransferSucceeded(address,uint256)": EventFragment;
+    "CryptoProposalCompleted(uint256,bool,uint256)": EventFragment;
+    "CryptoProposalCreated(uint256,string,uint256,address)": EventFragment;
+    "CryptoProposalVoted(uint256,address,bool)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
+    "W2wProposalCompleted(uint256,bool,uint256)": EventFragment;
+    "W2wProposalCreated(uint256,string,uint256,address)": EventFragment;
+    "W2wProposalVoted(uint256,address,bool)": EventFragment;
   };
 
+  getEvent(
+    nameOrSignatureOrTopic: "CompanyPensionTransferFailed"
+  ): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "CompanyPensionTransferSucceeded"
+  ): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "CryptoProposalCompleted"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "CryptoProposalCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "CryptoProposalVoted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "W2wProposalCompleted"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "W2wProposalCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "W2wProposalVoted"): EventFragment;
 }
+
+export interface CompanyPensionTransferFailedEventObject {
+  company: string;
+}
+export type CompanyPensionTransferFailedEvent = TypedEvent<
+  [string],
+  CompanyPensionTransferFailedEventObject
+>;
+
+export type CompanyPensionTransferFailedEventFilter =
+  TypedEventFilter<CompanyPensionTransferFailedEvent>;
+
+export interface CompanyPensionTransferSucceededEventObject {
+  company: string;
+  amount: BigNumber;
+}
+export type CompanyPensionTransferSucceededEvent = TypedEvent<
+  [string, BigNumber],
+  CompanyPensionTransferSucceededEventObject
+>;
+
+export type CompanyPensionTransferSucceededEventFilter =
+  TypedEventFilter<CompanyPensionTransferSucceededEvent>;
+
+export interface CryptoProposalCompletedEventObject {
+  proposalId: BigNumber;
+  success: boolean;
+  amount: BigNumber;
+}
+export type CryptoProposalCompletedEvent = TypedEvent<
+  [BigNumber, boolean, BigNumber],
+  CryptoProposalCompletedEventObject
+>;
+
+export type CryptoProposalCompletedEventFilter =
+  TypedEventFilter<CryptoProposalCompletedEvent>;
+
+export interface CryptoProposalCreatedEventObject {
+  proposalId: BigNumber;
+  description: string;
+  value: BigNumber;
+  currencyAddress: string;
+}
+export type CryptoProposalCreatedEvent = TypedEvent<
+  [BigNumber, string, BigNumber, string],
+  CryptoProposalCreatedEventObject
+>;
+
+export type CryptoProposalCreatedEventFilter =
+  TypedEventFilter<CryptoProposalCreatedEvent>;
+
+export interface CryptoProposalVotedEventObject {
+  proposalId: BigNumber;
+  voter: string;
+  vote: boolean;
+}
+export type CryptoProposalVotedEvent = TypedEvent<
+  [BigNumber, string, boolean],
+  CryptoProposalVotedEventObject
+>;
+
+export type CryptoProposalVotedEventFilter =
+  TypedEventFilter<CryptoProposalVotedEvent>;
 
 export interface InitializedEventObject {
   version: number;
@@ -256,6 +411,46 @@ export type OwnershipTransferredEvent = TypedEvent<
 
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
+
+export interface W2wProposalCompletedEventObject {
+  proposalId: BigNumber;
+  success: boolean;
+  amount: BigNumber;
+}
+export type W2wProposalCompletedEvent = TypedEvent<
+  [BigNumber, boolean, BigNumber],
+  W2wProposalCompletedEventObject
+>;
+
+export type W2wProposalCompletedEventFilter =
+  TypedEventFilter<W2wProposalCompletedEvent>;
+
+export interface W2wProposalCreatedEventObject {
+  proposalId: BigNumber;
+  description: string;
+  value: BigNumber;
+  targetAddress: string;
+}
+export type W2wProposalCreatedEvent = TypedEvent<
+  [BigNumber, string, BigNumber, string],
+  W2wProposalCreatedEventObject
+>;
+
+export type W2wProposalCreatedEventFilter =
+  TypedEventFilter<W2wProposalCreatedEvent>;
+
+export interface W2wProposalVotedEventObject {
+  proposalId: BigNumber;
+  voter: string;
+  vote: boolean;
+}
+export type W2wProposalVotedEvent = TypedEvent<
+  [BigNumber, string, boolean],
+  W2wProposalVotedEventObject
+>;
+
+export type W2wProposalVotedEventFilter =
+  TypedEventFilter<W2wProposalVotedEvent>;
 
 export interface Company extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -303,7 +498,16 @@ export interface Company extends BaseContract {
       _employeeJoiningDates: PromiseOrValue<BigNumberish>[],
       _employeeLeavingDates: PromiseOrValue<BigNumberish>[],
       _minimumServiceRequireds: PromiseOrValue<BigNumberish>[],
-      _employeeActives: PromiseOrValue<boolean>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    approveCryptoProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    approveW2wProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -312,10 +516,19 @@ export interface Company extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    checkUpkeep(
-      checkData: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<[boolean, string] & { upkeepNeeded: boolean }>;
+    createCryptoProposal(
+      _description: PromiseOrValue<string>,
+      _value: PromiseOrValue<BigNumberish>,
+      _currencyAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    createW2wProposal(
+      _description: PromiseOrValue<string>,
+      _value: PromiseOrValue<BigNumberish>,
+      _targetAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     employeeAddresses(
       arg0: PromiseOrValue<BigNumberish>,
@@ -336,14 +549,22 @@ export interface Company extends BaseContract {
       }
     >;
 
+    finalizeCryptoProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    finalizeW2wProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     getEmployee(
       _employeeAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<[Company.EmployeeStructOutput]>;
+    ): Promise<[EmployeeStructOutput]>;
 
-    getEmployees(
-      overrides?: CallOverrides
-    ): Promise<[Company.EmployeeStructOutput[]]>;
+    getEmployees(overrides?: CallOverrides): Promise<[EmployeeStructOutput[]]>;
 
     initialize(
       _owner: PromiseOrValue<string>,
@@ -351,18 +572,24 @@ export interface Company extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    lastPensionTimeStamp(overrides?: CallOverrides): Promise<[BigNumber]>;
+    isAddressInEmployee(
+      addressToFind: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
-    performUpkeep(
-      performData: PromiseOrValue<BytesLike>,
+    pensionCounter(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    renounceOwnership(
+    swapRouter(overrides?: CallOverrides): Promise<[string]>;
+
+    transferFundsToEmployees(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -402,7 +629,16 @@ export interface Company extends BaseContract {
     _employeeJoiningDates: PromiseOrValue<BigNumberish>[],
     _employeeLeavingDates: PromiseOrValue<BigNumberish>[],
     _minimumServiceRequireds: PromiseOrValue<BigNumberish>[],
-    _employeeActives: PromiseOrValue<boolean>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  approveCryptoProposal(
+    proposalIndex: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  approveW2wProposal(
+    proposalIndex: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -411,10 +647,19 @@ export interface Company extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  checkUpkeep(
-    checkData: PromiseOrValue<BytesLike>,
-    overrides?: CallOverrides
-  ): Promise<[boolean, string] & { upkeepNeeded: boolean }>;
+  createCryptoProposal(
+    _description: PromiseOrValue<string>,
+    _value: PromiseOrValue<BigNumberish>,
+    _currencyAddress: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  createW2wProposal(
+    _description: PromiseOrValue<string>,
+    _value: PromiseOrValue<BigNumberish>,
+    _targetAddress: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   employeeAddresses(
     arg0: PromiseOrValue<BigNumberish>,
@@ -435,14 +680,22 @@ export interface Company extends BaseContract {
     }
   >;
 
+  finalizeCryptoProposal(
+    proposalIndex: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  finalizeW2wProposal(
+    proposalIndex: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   getEmployee(
     _employeeAddress: PromiseOrValue<string>,
     overrides?: CallOverrides
-  ): Promise<Company.EmployeeStructOutput>;
+  ): Promise<EmployeeStructOutput>;
 
-  getEmployees(
-    overrides?: CallOverrides
-  ): Promise<Company.EmployeeStructOutput[]>;
+  getEmployees(overrides?: CallOverrides): Promise<EmployeeStructOutput[]>;
 
   initialize(
     _owner: PromiseOrValue<string>,
@@ -450,18 +703,24 @@ export interface Company extends BaseContract {
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  lastPensionTimeStamp(overrides?: CallOverrides): Promise<BigNumber>;
+  isAddressInEmployee(
+    addressToFind: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   name(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
-  performUpkeep(
-    performData: PromiseOrValue<BytesLike>,
+  pensionCounter(overrides?: CallOverrides): Promise<BigNumber>;
+
+  renounceOwnership(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  renounceOwnership(
+  swapRouter(overrides?: CallOverrides): Promise<string>;
+
+  transferFundsToEmployees(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -501,7 +760,16 @@ export interface Company extends BaseContract {
       _employeeJoiningDates: PromiseOrValue<BigNumberish>[],
       _employeeLeavingDates: PromiseOrValue<BigNumberish>[],
       _minimumServiceRequireds: PromiseOrValue<BigNumberish>[],
-      _employeeActives: PromiseOrValue<boolean>[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    approveCryptoProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    approveW2wProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -510,10 +778,19 @@ export interface Company extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    checkUpkeep(
-      checkData: PromiseOrValue<BytesLike>,
+    createCryptoProposal(
+      _description: PromiseOrValue<string>,
+      _value: PromiseOrValue<BigNumberish>,
+      _currencyAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<[boolean, string] & { upkeepNeeded: boolean }>;
+    ): Promise<void>;
+
+    createW2wProposal(
+      _description: PromiseOrValue<string>,
+      _value: PromiseOrValue<BigNumberish>,
+      _targetAddress: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     employeeAddresses(
       arg0: PromiseOrValue<BigNumberish>,
@@ -534,14 +811,22 @@ export interface Company extends BaseContract {
       }
     >;
 
+    finalizeCryptoProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    finalizeW2wProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     getEmployee(
       _employeeAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<Company.EmployeeStructOutput>;
+    ): Promise<EmployeeStructOutput>;
 
-    getEmployees(
-      overrides?: CallOverrides
-    ): Promise<Company.EmployeeStructOutput[]>;
+    getEmployees(overrides?: CallOverrides): Promise<EmployeeStructOutput[]>;
 
     initialize(
       _owner: PromiseOrValue<string>,
@@ -549,18 +834,22 @@ export interface Company extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    lastPensionTimeStamp(overrides?: CallOverrides): Promise<BigNumber>;
+    isAddressInEmployee(
+      addressToFind: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
-    performUpkeep(
-      performData: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    pensionCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    swapRouter(overrides?: CallOverrides): Promise<string>;
+
+    transferFundsToEmployees(overrides?: CallOverrides): Promise<void>;
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
@@ -580,6 +869,57 @@ export interface Company extends BaseContract {
   };
 
   filters: {
+    "CompanyPensionTransferFailed(address)"(
+      company?: PromiseOrValue<string> | null
+    ): CompanyPensionTransferFailedEventFilter;
+    CompanyPensionTransferFailed(
+      company?: PromiseOrValue<string> | null
+    ): CompanyPensionTransferFailedEventFilter;
+
+    "CompanyPensionTransferSucceeded(address,uint256)"(
+      company?: PromiseOrValue<string> | null,
+      amount?: null
+    ): CompanyPensionTransferSucceededEventFilter;
+    CompanyPensionTransferSucceeded(
+      company?: PromiseOrValue<string> | null,
+      amount?: null
+    ): CompanyPensionTransferSucceededEventFilter;
+
+    "CryptoProposalCompleted(uint256,bool,uint256)"(
+      proposalId?: PromiseOrValue<BigNumberish> | null,
+      success?: null,
+      amount?: null
+    ): CryptoProposalCompletedEventFilter;
+    CryptoProposalCompleted(
+      proposalId?: PromiseOrValue<BigNumberish> | null,
+      success?: null,
+      amount?: null
+    ): CryptoProposalCompletedEventFilter;
+
+    "CryptoProposalCreated(uint256,string,uint256,address)"(
+      proposalId?: PromiseOrValue<BigNumberish> | null,
+      description?: null,
+      value?: null,
+      currencyAddress?: null
+    ): CryptoProposalCreatedEventFilter;
+    CryptoProposalCreated(
+      proposalId?: PromiseOrValue<BigNumberish> | null,
+      description?: null,
+      value?: null,
+      currencyAddress?: null
+    ): CryptoProposalCreatedEventFilter;
+
+    "CryptoProposalVoted(uint256,address,bool)"(
+      proposalId?: PromiseOrValue<BigNumberish> | null,
+      voter?: PromiseOrValue<string> | null,
+      vote?: null
+    ): CryptoProposalVotedEventFilter;
+    CryptoProposalVoted(
+      proposalId?: PromiseOrValue<BigNumberish> | null,
+      voter?: PromiseOrValue<string> | null,
+      vote?: null
+    ): CryptoProposalVotedEventFilter;
+
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
 
@@ -591,6 +931,41 @@ export interface Company extends BaseContract {
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
+
+    "W2wProposalCompleted(uint256,bool,uint256)"(
+      proposalId?: PromiseOrValue<BigNumberish> | null,
+      success?: null,
+      amount?: null
+    ): W2wProposalCompletedEventFilter;
+    W2wProposalCompleted(
+      proposalId?: PromiseOrValue<BigNumberish> | null,
+      success?: null,
+      amount?: null
+    ): W2wProposalCompletedEventFilter;
+
+    "W2wProposalCreated(uint256,string,uint256,address)"(
+      proposalId?: PromiseOrValue<BigNumberish> | null,
+      description?: null,
+      value?: null,
+      targetAddress?: null
+    ): W2wProposalCreatedEventFilter;
+    W2wProposalCreated(
+      proposalId?: PromiseOrValue<BigNumberish> | null,
+      description?: null,
+      value?: null,
+      targetAddress?: null
+    ): W2wProposalCreatedEventFilter;
+
+    "W2wProposalVoted(uint256,address,bool)"(
+      proposalId?: PromiseOrValue<BigNumberish> | null,
+      voter?: PromiseOrValue<string> | null,
+      vote?: null
+    ): W2wProposalVotedEventFilter;
+    W2wProposalVoted(
+      proposalId?: PromiseOrValue<BigNumberish> | null,
+      voter?: PromiseOrValue<string> | null,
+      vote?: null
+    ): W2wProposalVotedEventFilter;
   };
 
   estimateGas: {
@@ -613,7 +988,16 @@ export interface Company extends BaseContract {
       _employeeJoiningDates: PromiseOrValue<BigNumberish>[],
       _employeeLeavingDates: PromiseOrValue<BigNumberish>[],
       _minimumServiceRequireds: PromiseOrValue<BigNumberish>[],
-      _employeeActives: PromiseOrValue<boolean>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    approveCryptoProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    approveW2wProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -622,9 +1006,18 @@ export interface Company extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    checkUpkeep(
-      checkData: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
+    createCryptoProposal(
+      _description: PromiseOrValue<string>,
+      _value: PromiseOrValue<BigNumberish>,
+      _currencyAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    createW2wProposal(
+      _description: PromiseOrValue<string>,
+      _value: PromiseOrValue<BigNumberish>,
+      _targetAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     employeeAddresses(
@@ -635,6 +1028,16 @@ export interface Company extends BaseContract {
     employees(
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    finalizeCryptoProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    finalizeW2wProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     getEmployee(
@@ -650,18 +1053,24 @@ export interface Company extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    lastPensionTimeStamp(overrides?: CallOverrides): Promise<BigNumber>;
+    isAddressInEmployee(
+      addressToFind: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
-    performUpkeep(
-      performData: PromiseOrValue<BytesLike>,
+    pensionCounter(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    renounceOwnership(
+    swapRouter(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transferFundsToEmployees(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -702,7 +1111,16 @@ export interface Company extends BaseContract {
       _employeeJoiningDates: PromiseOrValue<BigNumberish>[],
       _employeeLeavingDates: PromiseOrValue<BigNumberish>[],
       _minimumServiceRequireds: PromiseOrValue<BigNumberish>[],
-      _employeeActives: PromiseOrValue<boolean>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    approveCryptoProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    approveW2wProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -711,9 +1129,18 @@ export interface Company extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    checkUpkeep(
-      checkData: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
+    createCryptoProposal(
+      _description: PromiseOrValue<string>,
+      _value: PromiseOrValue<BigNumberish>,
+      _currencyAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    createW2wProposal(
+      _description: PromiseOrValue<string>,
+      _value: PromiseOrValue<BigNumberish>,
+      _targetAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     employeeAddresses(
@@ -724,6 +1151,16 @@ export interface Company extends BaseContract {
     employees(
       arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    finalizeCryptoProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    finalizeW2wProposal(
+      proposalIndex: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     getEmployee(
@@ -739,7 +1176,8 @@ export interface Company extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    lastPensionTimeStamp(
+    isAddressInEmployee(
+      addressToFind: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -747,12 +1185,15 @@ export interface Company extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    performUpkeep(
-      performData: PromiseOrValue<BytesLike>,
+    pensionCounter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    renounceOwnership(
+    swapRouter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    transferFundsToEmployees(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

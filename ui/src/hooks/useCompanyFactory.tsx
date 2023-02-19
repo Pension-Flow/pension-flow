@@ -1,16 +1,46 @@
 import { Contract, ethers } from "ethers";
+import { useContract, useSigner } from "wagmi";
 import CompanyFactoryContract from "@/contracts/CompanyFactory.json";
 
 export const useCompanyFactory = () => {
-  const provider = new ethers.providers.JsonRpcProvider(
-    "https://tame-cosmopolitan-violet.matic-testnet.discover.quiknode.pro/3e6de038de14a63965f8bd96cc3c52b4d32fc918/"
-  );
-  const companyContract = new Contract(
-    "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-    // CompanyFactoryContract.address,
-    CompanyFactoryContract.abi,
-    provider
-  );
+  const { data: signer } = useSigner();
 
-  return { companyContract };
+  const companyFactoryContract = useContract({
+    address: CompanyFactoryContract.address,
+    abi: CompanyFactoryContract.abi,
+    signerOrProvider: signer,
+  });
+
+  const createCompany = async (name: string): Promise<string> => {
+    console.log("Company Factory", companyFactoryContract);
+
+    const companyAddressHash = await companyFactoryContract!.createCompany(
+      name,
+      {
+        value: ethers.utils.parseEther("0.000001"),
+      }
+    );
+    await companyAddressHash!.wait();
+
+    const companyCount = await companyFactoryContract!.companyCount();
+    const companyAddress = await companyFactoryContract!.companies(
+      companyCount - 1
+    );
+
+    console.log("company address", companyAddress);
+
+    await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        address: companyAddress,
+      }),
+    });
+    return companyAddress;
+  };
+
+  return { companyFactoryContract, createCompany };
 };

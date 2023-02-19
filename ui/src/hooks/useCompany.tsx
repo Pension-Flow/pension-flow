@@ -1,32 +1,61 @@
-import { UploadFile } from "antd";
 import PapaParse from "papaparse";
-import { Contract, ethers } from "ethers";
-
 import CompanyContract from "@/contracts/Company.json";
+import { useEffect, useState } from "react";
+import { useSigner } from "wagmi";
+import { ethers, Contract } from "ethers";
+import { Signer } from "@wagmi/core";
+import { getSolidityDate, yearsToSeconds, ddmmyyToDate } from "@/lib/helper";
+import { notification } from "antd";
+import { useRouter } from "next/router";
 
 interface EmployeeData {
   employeeAddress: string;
-  pensionStartDate: number;
+  pensionStartDate: Date;
   pensionDuration: number;
-  monthyAmount: number;
-  employeeJoiningDate: number;
-  employeeLeavingDate: number;
+  monthlyAmount: number;
+  employeeJoiningDate: Date;
+  employeeLeavingDate: Date;
   minimumServiceRequired: number;
 }
 
 export const useCompany = () => {
-  const provider = new ethers.providers.JsonRpcProvider(
-    "https://tame-cosmopolitan-violet.matic-testnet.discover.quiknode.pro/3e6de038de14a63965f8bd96cc3c52b4d32fc918/"
-  );
-  const companyContract = new Contract(
-    "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-    // CompanyContract.address,
-    CompanyContract.abi,
-    provider
-  );
+  const [companyContract, setCompanyContract] = useState<Contract>();
+  const router = useRouter();
 
-  const uploadCsv = async (file: any) => {
-    if (!file) return;
+  const { data: signer } = useSigner();
+
+  useEffect(() => {
+    const address = localStorage.getItem("companyAddress");
+    if (address) {
+      const companyContract = new ethers.Contract(
+        address,
+        CompanyContract.abi,
+        signer as Signer
+      );
+      setCompanyContract(companyContract);
+    }
+  }, [signer]);
+
+  const addAddress = (address: string) => {
+    localStorage.setItem("companyAddress", address);
+    const companyContract = new ethers.Contract(
+      address,
+      CompanyContract.abi,
+      signer as Signer
+    );
+    setCompanyContract(companyContract);
+  };
+
+  const uploadCsv = async (file: any, companyAddress: string) => {
+    if (!companyContract) {
+      const companyContract = new ethers.Contract(
+        companyAddress,
+        CompanyContract.abi,
+        signer as Signer
+      );
+      setCompanyContract(companyContract);
+    }
+    if (!companyContract || !file) return;
     const reader = new FileReader();
     const blob = new Blob([file.originFileObj], { type: "text/csv" });
     reader.readAsText(blob);
@@ -39,26 +68,44 @@ export const useCompany = () => {
       const csvData: EmployeeData[] = data.map((row: any) => {
         return {
           employeeAddress: row[0],
-          pensionStartDate: row[1],
+          pensionStartDate: ddmmyyToDate(row[1]),
           pensionDuration: row[2],
-          monthyAmount: row[3],
-          employeeJoiningDate: row[4],
-          employeeLeavingDate: row[5],
+          monthlyAmount: row[3],
+          employeeJoiningDate: ddmmyyToDate(row[4]),
+          employeeLeavingDate: ddmmyyToDate(row[5]),
           minimumServiceRequired: row[6],
         };
       });
-      console.log(csvData);
-      // const tx = await companyContract.addEmployees(
-      //   csvData.map((row) => row.employeeAddress),
-      //   csvData.map((row) => row.pensionStartDate),
-      //   csvData.map((row) => row.pensionDuration),
-      //   csvData.map((row) => row.monthyAmount),
-      //   csvData.map((row) => row.employeeJoiningDate),
-      //   csvData.map((row) => row.employeeLeavingDate),
-      //   csvData.map((row) => row.minimumServiceRequired)
-      // );
+      await companyContract.addEmployees(
+        csvData.map((row) => row.employeeAddress),
+        csvData.map((row) => getSolidityDate(row.pensionStartDate)),
+        csvData.map((row) => yearsToSeconds(row.pensionDuration)),
+        csvData.map((row) => row.monthlyAmount),
+        csvData.map((row) => getSolidityDate(row.employeeJoiningDate)),
+        csvData.map((row) => getSolidityDate(row.employeeLeavingDate)),
+        csvData.map((row) => yearsToSeconds(row.minimumServiceRequired))
+      );
+      console.log("adding employees to mongodb");
+      await fetch("/api/add-employees", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          companyAddress: companyContract.address,
+          employees: csvData,
+        }),
+      }).then(() => {
+        notification.success({
+          message: "Success",
+          description: "Company created successfully",
+        });
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 2000);
+      });
     };
   };
 
-  return { companyContract, uploadCsv };
+  return { companyContract, uploadCsv, addAddress };
 };
