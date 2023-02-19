@@ -26,17 +26,14 @@ export default function Home() {
           <Tabs.TabPane tab="Register Your Company" key="1">
             <SignupForm />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Register Your Company" key="1">
-            <SignupForm />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Card Test" key="3">
+          <Tabs.TabPane tab="Card Test" key="2">
             <ShowInvestCard
               title="Test 1"
               content="Content 1"
               deadline="deadline 1"
             ></ShowInvestCard>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Details Component Test" key="4">
+          <Tabs.TabPane tab="Details Component Test" key="3">
             <ShowInvestmentDetails
               title="Test 1"
               content="Content 1"
@@ -44,7 +41,7 @@ export default function Home() {
               amount="100000"
             ></ShowInvestmentDetails>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Invest" key="3">
+          <Tabs.TabPane tab="Invest" key="4">
             <InvestForm />
           </Tabs.TabPane>
         </Tabs>
