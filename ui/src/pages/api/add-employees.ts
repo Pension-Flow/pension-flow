@@ -13,12 +13,14 @@ export default async function handler(
     if (!req.body.companyAddress)
       res.status(400).json("Please enter company address!");
     const { employees, companyAddress } = req.body;
+    // @ts-ignore
     const company = await Company.findOne({
       address: companyAddress,
     });
     if (!company) res.status(400).json("Company not found!");
     const stringToNumber = (str: string) => parseInt(str, 10);
     for (let i = 0; i < employees.length; i++) {
+      // @ts-ignore
       const employee = await Employee.create({
         address: employees[i].employeeAddress,
         company: company._id,
