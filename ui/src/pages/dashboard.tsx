@@ -35,7 +35,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="main__right__wrapper">
-          {/* TODO DISPLAY THE EMPOYEE LIST */}
+          {/* TODO DISPLAY THE EMPLOYEE LIST */}
         </div>
       </div>
     </>
