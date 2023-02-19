@@ -47,7 +47,9 @@ export const useCompany = () => {
   };
 
   const uploadCsv = async (file: any, companyAddress: string) => {
+    console.log("Starting upload");
     if (!companyContract) {
+      console.log("creating company contract");
       const companyContract = new ethers.Contract(
         companyAddress,
         CompanyContract.abi,
@@ -55,6 +57,7 @@ export const useCompany = () => {
       );
       setCompanyContract(companyContract);
     }
+    console.log("uploading csv", file);
     if (!companyContract || !file) return;
     const reader = new FileReader();
     const blob = new Blob([file.originFileObj], { type: "text/csv" });
@@ -76,6 +79,7 @@ export const useCompany = () => {
           minimumServiceRequired: row[6],
         };
       });
+      console.log("adding employees to blockchain", csvData);
       await companyContract.addEmployees(
         csvData.map((row) => row.employeeAddress),
         csvData.map((row) => getSolidityDate(row.pensionStartDate)),
@@ -101,7 +105,7 @@ export const useCompany = () => {
           description: "Company created successfully",
         });
         setTimeout(() => {
-          router.push("/dashboard");
+          router.push("/");
         }, 2000);
       });
     };

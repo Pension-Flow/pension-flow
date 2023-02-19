@@ -9,6 +9,10 @@ const companySchema = new Schema({
     type: String,
     required: true,
   },
+  ownerAddress: {
+    type: String,
+    required: true,
+  },
   employees: [
     {
       type: Schema.Types.ObjectId,
