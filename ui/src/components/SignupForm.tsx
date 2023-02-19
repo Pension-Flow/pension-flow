@@ -7,21 +7,25 @@ import {
   message,
   UploadProps,
   UploadFile,
+  notification,
 } from "antd";
-import {
-  UserOutlined,
-  LockOutlined,
-  MailOutlined,
-  InboxOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, InboxOutlined } from "@ant-design/icons";
+import { useCompany } from "@/hooks/useCompany";
 
 const SignupForm = () => {
   const [form] = Form.useForm();
   const [employeeList, setEmployeeList] = useState<UploadFile<any> | File>();
+  const { companyContract, uploadCsv } = useCompany();
 
   const onFinish = (values: any) => {
     console.log(values);
     console.log(employeeList);
+    if (employeeList) uploadCsv(employeeList);
+    else
+      notification.error({
+        message: "Error",
+        description: "Please upload employee list",
+      });
   };
 
   const onReset = () => {
@@ -32,6 +36,7 @@ const SignupForm = () => {
     name: "file",
     multiple: false,
     maxCount: 1,
+    accept: ".csv",
     onChange(info) {
       const { status } = info.file;
       if (status !== "uploading") {
@@ -125,7 +130,7 @@ const SignupForm = () => {
           },
         ]}
       > */}
-        {/* <Input.Password
+      {/* <Input.Password
           size="large"
           placeholder="Password"
           prefix={
@@ -144,8 +149,8 @@ const SignupForm = () => {
         </p>
         <p className="ant-upload-text">Employee List</p>
         <p className="ant-upload-hint">
-          Click or drag a .csv file to this area to upload. Make sure the file consists
-          of column of employee wallet address
+          Click or drag a .csv file to this area to upload. Make sure the file
+          consists of column of employee wallet address
         </p>
       </Upload.Dragger>
       <Form.Item>
