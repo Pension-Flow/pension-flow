@@ -6,7 +6,7 @@ import {
   DashboardOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Layout, Menu, theme } from "antd";
+import { Layout, Menu, theme, Button } from "antd";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Typography } from "antd";
 import { useRouter } from "next/router";
@@ -73,7 +73,15 @@ const CustomLayout = ({ children }: IProp) => {
           <Title style={{ color: "white", marginTop: 3 }} level={2}>
             Pension Flow
           </Title>
-          <ConnectButton showBalance accountStatus={"address"} />
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Button type="primary" htmlType="submit" style={{}}>
+              Login as employee
+            </Button>
+            <Button type="primary" htmlType="submit" style={{ margin: 10 }}>
+              Login as Company admin
+            </Button>
+            <ConnectButton showBalance accountStatus={"address"} />
+          </div>
         </div>
       </Header>
       <Layout>
@@ -89,7 +97,7 @@ const CustomLayout = ({ children }: IProp) => {
             style={{ height: "100%", borderRight: 0 }}
             items={items2}
             theme="dark"
-          />
+          ></Menu>
         </Sider>
         <Layout style={{ padding: "20px", overflowY: "auto" }}>
           <Content
