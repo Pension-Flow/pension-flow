@@ -17,10 +17,10 @@ export default function Home() {
           defaultActiveKey="1"
           style={{ width: "30vw", margin: "2% auto 10%" }}
         >
-          <Tabs.TabPane tab="Login" key="1">
+          {/* <Tabs.TabPane tab="Login" key="1">
             <LoginForm />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Sign Up" key="2">
+          </Tabs.TabPane> */}
+          <Tabs.TabPane tab="Register Your Company" key="2">
             <SignupForm />
           </Tabs.TabPane>
         </Tabs>

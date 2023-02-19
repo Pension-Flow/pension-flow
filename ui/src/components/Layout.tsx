@@ -6,7 +6,7 @@ import {
   DashboardOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Layout, Menu, theme } from "antd";
+import { Layout, Menu, theme, Button } from "antd";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Typography } from "antd";
 import { useRouter } from "next/router";
@@ -86,10 +86,26 @@ const CustomLayout = ({ children }: IProp) => {
           <Menu
             mode="inline"
             defaultOpenKeys={["1"]}
-            style={{ height: "100%", borderRight: 0 }}
+            style={{ height: "83.5%", borderRight: 0 }}
             items={items2}
             theme="dark"
-          />
+          ></Menu>
+          <div style={{ background: "#001529" }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ marginRight: "3%", marginTop: "0.8rem" }}
+            >
+              Login as employee
+            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ marginRight: "3%", marginTop: "0.8rem" }}
+            >
+              Login as Company admin
+            </Button>
+          </div>
         </Sider>
         <Layout style={{ padding: "20px", overflowY: "auto" }}>
           <Content

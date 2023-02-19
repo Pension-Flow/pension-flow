@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Radio} from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 const LoginForm = () => {
@@ -15,7 +15,11 @@ const LoginForm = () => {
 
   return (
     <Form form={form} name="control-hooks" onFinish={onFinish}>
-      <Form.Item
+    <Radio.Group defaultValue="a" buttonStyle="solid">
+      <Radio.Button value="a">Employee</Radio.Button>
+      <Radio.Button value="b">Company Admin</Radio.Button>
+    </Radio.Group>
+      {/* <Form.Item
         name="email"
         rules={[
           { required: true, message: "Email is required" },
@@ -38,8 +42,8 @@ const LoginForm = () => {
             />
           }
         />
-      </Form.Item>
-      <Form.Item
+      </Form.Item> */}
+      {/* <Form.Item
         name="password"
         rules={[
           {
@@ -73,21 +77,14 @@ const LoginForm = () => {
             />
           }
         />
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item>
         <Button
           type="primary"
           htmlType="submit"
-          style={{ width: "6vw", marginRight: "3%", marginTop: "0.8rem" }}
+          style={{ marginRight: "3%", marginTop: "0.8rem" }}
         >
           Login
-        </Button>
-        <Button
-          htmlType="button"
-          onClick={onReset}
-          style={{ width: "6vw", marginTop: "0.8rem" }}
-        >
-          Reset
         </Button>
       </Form.Item>
     </Form>
