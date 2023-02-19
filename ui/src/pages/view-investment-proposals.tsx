@@ -17,10 +17,10 @@ const ViewInvestmentProposals = () => {
           .cryptoProposals()
           .then((res) => {
             // setInvestments(res);
-            console.log("CRYPTO PROPOSAL",res);
+            console.log("CRYPTO PROPOSAL", res);
           })
           .catch((err) => {
-            console.log(err);
+            console.log("ERROR WHILE FETCHING CRYPTO PROPOSALS: ", err);
           });
       } else {
         companyContract
@@ -30,7 +30,7 @@ const ViewInvestmentProposals = () => {
             console.log("W2W PROPOSAL", res);
           })
           .catch((err) => {
-            console.log(err);
+            console.log("ERROR WHILE FETCHING W2W PROPOSALS: ", err);
           });
       }
     }

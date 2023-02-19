@@ -11,6 +11,7 @@ import {
   DatePickerProps,
 } from "antd";
 import { useCompany } from "@/hooks/useCompany";
+import { getSolidityDate } from "@/lib/helper";
 const { TextArea } = Input;
 
 function W2WInvestmentForm() {
@@ -19,11 +20,12 @@ function W2WInvestmentForm() {
   const [title, setTitle] = React.useState<string>("");
   const [recieverAddress, setRecieverAddress] = React.useState<string>("");
   const [amount, setAmount] = React.useState<number>(0);
-  const [deadlineVote, setDeadlineVote] = React.useState<string>("");
+  const [deadlineVote, setDeadlineVote] = React.useState<any>("");
   const [proposal, setProposal] = React.useState<string>("");
 
   const onDateChange: DatePickerProps["onChange"] = (date, dateString) => {
     console.log(date, dateString);
+    setDeadlineVote(date);
   };
 
   const submitW2WProposalHandler = () => {
@@ -32,9 +34,9 @@ function W2WInvestmentForm() {
         .createW2wProposal(
           title,
           proposal,
-          deadlineVote,
+          getSolidityDate(deadlineVote),
           amount,
-          recieverAddress,
+          recieverAddress
         )
         .then((res) => {
           console.log("W2W PROPOSAL SUBMITTED", res);

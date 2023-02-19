@@ -10,6 +10,7 @@ const InvestmentList = ({ investments }) => {
             <ShowInvestCard
               title={investment.title}
               deadline={investment.deadline}
+              id={index}
             />
           </List.Item>
         );
