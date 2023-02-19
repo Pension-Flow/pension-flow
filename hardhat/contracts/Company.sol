@@ -214,14 +214,14 @@ contract Company is Initializable, OwnableUpgradeable {
         string memory _description,
         uint256 _deadline,
         uint256 _value,
-        address payable _targetAddress
+        address _targetAddress
     ) public onlyOwner {
         W2wProposal storage newRequest = w2wProposals[noOfW2wProposals++];
         newRequest.title = _title;
         newRequest.description = _description;
         newRequest.deadline = _deadline;
         newRequest.value = _value;
-        newRequest.targetAddress = _targetAddress;
+        newRequest.targetAddress = payable(_targetAddress);
         newRequest.complete = false;
         newRequest.approvalCount = 0;
     }
@@ -232,7 +232,10 @@ contract Company is Initializable, OwnableUpgradeable {
      */
     function approveCryptoProposal(uint256 proposalIndex) public {
         // checking if the caller of the function is an approver or not
-        require(isAddressInEmployee(msg.sender) && block.timestamp < cryptoProposals[proposalIndex].deadline);
+        require(
+            isAddressInEmployee(msg.sender) &&
+                block.timestamp < cryptoProposals[proposalIndex].deadline
+        );
 
         CryptoProposal storage currProposal = cryptoProposals[proposalIndex];
 
@@ -249,7 +252,10 @@ contract Company is Initializable, OwnableUpgradeable {
      */
     function approveW2wProposal(uint256 proposalIndex) public {
         // checking if the caller of the function is an approver or not
-        require(isAddressInEmployee(msg.sender) && block.timestamp < w2wProposals[proposalIndex].deadline);
+        require(
+            isAddressInEmployee(msg.sender) &&
+                block.timestamp < w2wProposals[proposalIndex].deadline
+        );
 
         W2wProposal storage currProposal = w2wProposals[proposalIndex];
 

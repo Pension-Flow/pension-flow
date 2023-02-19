@@ -1,88 +1,65 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Contract, ethers } from "ethers";
 import {
   Form,
   Input,
   Button,
   DatePicker,
   InputNumber,
-  TreeSelect,
-  Switch,
-  Checkbox,
   DatePickerProps,
 } from "antd";
 import { useCompany } from "@/hooks/useCompany";
 import { getSolidityDate } from "@/lib/helper";
+import { Router, useRouter } from "next/router";
 const { TextArea } = Input;
 
 function W2WInvestmentForm() {
+  const [form] = Form.useForm();
   const { companyContract } = useCompany();
-
-  const [title, setTitle] = React.useState<string>("");
-  const [recieverAddress, setRecieverAddress] = React.useState<string>("");
-  const [amount, setAmount] = React.useState<number>(0);
-  const [deadlineVote, setDeadlineVote] = React.useState<any>("");
-  const [proposal, setProposal] = React.useState<string>("");
+  const [deadlineVote, setDeadlineVote] = React.useState<Date>();
+  const router = useRouter();
 
   const onDateChange: DatePickerProps["onChange"] = (date, dateString) => {
     console.log(date, dateString);
-    setDeadlineVote(date);
+    setDeadlineVote(new Date(dateString));
   };
 
-  const submitW2WProposalHandler = () => {
+  const onFinish = (values: any) => {
     if (companyContract) {
       companyContract
         .createW2wProposal(
-          title,
-          proposal,
+          values.title,
+          values.proposal,
           getSolidityDate(deadlineVote),
-          amount,
-          recieverAddress
+          values.amount,
+          values.recieverAddress
         )
         .then((res) => {
           console.log("W2W PROPOSAL SUBMITTED", res);
-        })
-        .catch((err) => {
-          console.log(err);
+          router.push("/view-investment-proposals");
         });
     }
   };
 
   return (
     <div style={{ width: "100%", marginTop: "20px" }}>
-      <Form>
-        <Form.Item label="Title">
-          <Input
-            onChange={(val: any) => {
-              setTitle(val);
-            }}
-          />
+      <Form form={form} onFinish={onFinish} layout="vertical">
+        <Form.Item label="Title" name="title">
+          <Input />
         </Form.Item>
-        <Form.Item label="Proposal">
-          <TextArea
-            rows={5}
-            onChange={(event: any) => {
-              setProposal(event.target.value);
-            }}
-          />
+        <Form.Item label="Proposal" name="proposal">
+          <TextArea rows={5} />
         </Form.Item>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Form.Item label="Amount to be invested ">
-            <InputNumber
-              onChange={(val: any) => {
-                setAmount(val);
-              }}
-            />
+          <Form.Item label="Amount to be invested" name="amount">
+            <InputNumber />
           </Form.Item>
-          <Form.Item label="Deadline to Vote ">
+          <Form.Item label="Deadline to Vote">
             <DatePicker onChange={onDateChange} />
           </Form.Item>
         </div>
-        <Form.Item label="Reciever Address ">
-          <Input
-            onChange={(val: any) => {
-              setRecieverAddress(val);
-            }}
-          />
+        <Form.Item label="Reciever Address" name="recieverAddress">
+          <Input />
         </Form.Item>
         <Form.Item
           style={{
@@ -91,7 +68,7 @@ function W2WInvestmentForm() {
             alignItems: "center",
           }}
         >
-          <Button onClick={submitW2WProposalHandler}>Submit Proposal</Button>
+          <Button htmlType="submit">Submit Proposal</Button>
         </Form.Item>
       </Form>
     </div>

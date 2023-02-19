@@ -68,5 +68,3 @@ export type { Company } from "./contracts/Company";
 export { Company__factory } from "./factories/contracts/Company__factory";
 export type { CompanyFactory } from "./contracts/CompanyFactory";
 export { CompanyFactory__factory } from "./factories/contracts/CompanyFactory__factory";
-export type { Lock } from "./contracts/Lock";
-export { Lock__factory } from "./factories/contracts/Lock__factory";

@@ -76,7 +76,7 @@ function CryptoInvestForm() {
 
   return (
     <div style={{ width: "100%", marginTop: "20px" }}>
-      <Form>
+      <Form layout="vertical">
         <Form.Item label="Title">
           <Input
             onChange={(val: any) => {

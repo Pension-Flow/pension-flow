@@ -132,10 +132,6 @@ declare module "hardhat/types/runtime" {
       name: "CompanyFactory",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CompanyFactory__factory>;
-    getContractFactory(
-      name: "Lock",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Lock__factory>;
 
     getContractAt(
       name: "OwnableUpgradeable",
@@ -287,11 +283,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.CompanyFactory>;
-    getContractAt(
-      name: "Lock",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Lock>;
 
     // default types
     getContractFactory(

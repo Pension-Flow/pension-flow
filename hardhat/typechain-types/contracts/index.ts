@@ -3,4 +3,3 @@
 /* eslint-disable */
 export type { Company } from "./Company";
 export type { CompanyFactory } from "./CompanyFactory";
-export type { Lock } from "./Lock";

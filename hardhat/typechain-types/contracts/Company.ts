@@ -60,8 +60,8 @@ export interface CompanyInterface extends utils.Interface {
     "approveCryptoProposal(uint256)": FunctionFragment;
     "approveW2wProposal(uint256)": FunctionFragment;
     "changeName(string)": FunctionFragment;
-    "createCryptoProposal(string,uint256,address)": FunctionFragment;
-    "createW2wProposal(string,uint256,address)": FunctionFragment;
+    "createCryptoProposal(string,string,uint256,uint256,address)": FunctionFragment;
+    "createW2wProposal(string,string,uint256,uint256,address)": FunctionFragment;
     "employeeAddresses(uint256)": FunctionFragment;
     "employees(address)": FunctionFragment;
     "finalizeCryptoProposal(uint256)": FunctionFragment;
@@ -147,6 +147,8 @@ export interface CompanyInterface extends utils.Interface {
     functionFragment: "createCryptoProposal",
     values: [
       PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<string>
     ]
@@ -155,6 +157,8 @@ export interface CompanyInterface extends utils.Interface {
     functionFragment: "createW2wProposal",
     values: [
       PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<string>
     ]
@@ -517,14 +521,18 @@ export interface Company extends BaseContract {
     ): Promise<ContractTransaction>;
 
     createCryptoProposal(
+      _title: PromiseOrValue<string>,
       _description: PromiseOrValue<string>,
+      _deadline: PromiseOrValue<BigNumberish>,
       _value: PromiseOrValue<BigNumberish>,
       _currencyAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     createW2wProposal(
+      _title: PromiseOrValue<string>,
       _description: PromiseOrValue<string>,
+      _deadline: PromiseOrValue<BigNumberish>,
       _value: PromiseOrValue<BigNumberish>,
       _targetAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -648,14 +656,18 @@ export interface Company extends BaseContract {
   ): Promise<ContractTransaction>;
 
   createCryptoProposal(
+    _title: PromiseOrValue<string>,
     _description: PromiseOrValue<string>,
+    _deadline: PromiseOrValue<BigNumberish>,
     _value: PromiseOrValue<BigNumberish>,
     _currencyAddress: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   createW2wProposal(
+    _title: PromiseOrValue<string>,
     _description: PromiseOrValue<string>,
+    _deadline: PromiseOrValue<BigNumberish>,
     _value: PromiseOrValue<BigNumberish>,
     _targetAddress: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -779,14 +791,18 @@ export interface Company extends BaseContract {
     ): Promise<void>;
 
     createCryptoProposal(
+      _title: PromiseOrValue<string>,
       _description: PromiseOrValue<string>,
+      _deadline: PromiseOrValue<BigNumberish>,
       _value: PromiseOrValue<BigNumberish>,
       _currencyAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     createW2wProposal(
+      _title: PromiseOrValue<string>,
       _description: PromiseOrValue<string>,
+      _deadline: PromiseOrValue<BigNumberish>,
       _value: PromiseOrValue<BigNumberish>,
       _targetAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -1007,14 +1023,18 @@ export interface Company extends BaseContract {
     ): Promise<BigNumber>;
 
     createCryptoProposal(
+      _title: PromiseOrValue<string>,
       _description: PromiseOrValue<string>,
+      _deadline: PromiseOrValue<BigNumberish>,
       _value: PromiseOrValue<BigNumberish>,
       _currencyAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     createW2wProposal(
+      _title: PromiseOrValue<string>,
       _description: PromiseOrValue<string>,
+      _deadline: PromiseOrValue<BigNumberish>,
       _value: PromiseOrValue<BigNumberish>,
       _targetAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1130,14 +1150,18 @@ export interface Company extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     createCryptoProposal(
+      _title: PromiseOrValue<string>,
       _description: PromiseOrValue<string>,
+      _deadline: PromiseOrValue<BigNumberish>,
       _value: PromiseOrValue<BigNumberish>,
       _currencyAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     createW2wProposal(
+      _title: PromiseOrValue<string>,
       _description: PromiseOrValue<string>,
+      _deadline: PromiseOrValue<BigNumberish>,
       _value: PromiseOrValue<BigNumberish>,
       _targetAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }

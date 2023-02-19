@@ -33,6 +33,19 @@ export const useCompany = () => {
         signer as Signer
       );
       setCompanyContract(companyContract);
+    } else {
+      if (localStorage.getItem("isCompany") === "true") {
+        const companyData = JSON.parse(
+          localStorage.getItem("company") as string
+        );
+        setCompanyContract(
+          new ethers.Contract(
+            companyData.address,
+            CompanyContract.abi,
+            signer as Signer
+          )
+        );
+      }
     }
   }, [signer]);
 
