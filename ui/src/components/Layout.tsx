@@ -15,20 +15,18 @@ const { Title } = Typography;
 const { Header, Content, Sider } = Layout;
 
 const optionNames = [
-  "Dashboard",
   "Register Company",
-  // "Register Employee",
+  "Dashboard",
   "Pension",
-  "Add Investment"
+  "Add Investment",
 ];
 
 const optionRoutes = [
-  "/dashboard",
   "/register-company",
+  "/dashboard",
   // "/register-employee",
   "/pension",
-  "/add-investment"
-
+  "/add-investment",
 ];
 // TODO ->  Edit the icons according to the above options
 
@@ -77,11 +75,38 @@ const CustomLayout = ({ children }: IProp) => {
             Pension Flow
           </Title>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Button type="primary" htmlType="submit" style={{}}>
-              Login as employee
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{
+                width: "16vw",
+                padding: "19px 0",
+                borderRadius: 12,
+                fontSize: 16,
+                fontWeight: 600,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Login as Employee
             </Button>
-            <Button type="primary" htmlType="submit" style={{ margin: 10 }}>
-              Login as Company admin
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{
+                margin: 10,
+                width: "16vw",
+                padding: "19px 0",
+                borderRadius: 12,
+                fontSize: 16,
+                fontWeight: 600,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Login as Company
             </Button>
             <ConnectButton showBalance accountStatus={"address"} />
           </div>
