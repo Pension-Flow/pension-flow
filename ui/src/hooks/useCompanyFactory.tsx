@@ -37,8 +37,10 @@ export const useCompanyFactory = () => {
       body: JSON.stringify({
         name,
         address: companyAddress,
+        ownerAddress: await signer?.getAddress(),
       }),
     });
+    console.log("registered company on server");
     return companyAddress;
   };
 

@@ -18,11 +18,13 @@ const SignupForm = () => {
   const [employeeList, setEmployeeList] = useState<UploadFile<any> | File>();
   const { createCompany } = useCompanyFactory();
   const { uploadCsv, addAddress } = useCompany();
+  const [loading, setLoading] = useState(false);
 
   const onFinish = async (values: any) => {
     console.log(values);
     console.log(employeeList);
     if (employeeList) {
+      setLoading(true);
       const companyAddress = await createCompany(values.name);
       addAddress(companyAddress);
       await uploadCsv(employeeList, companyAddress);
@@ -31,6 +33,7 @@ const SignupForm = () => {
         message: "Error",
         description: "Please upload employee list",
       });
+    setLoading(false);
   };
 
   const onReset = () => {
@@ -43,16 +46,8 @@ const SignupForm = () => {
     maxCount: 1,
     accept: ".csv",
     onChange(info) {
-      const { status } = info.file;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (status === "done") {
-        message.success(`${info.file.name} file uploaded successfully.`);
-        setEmployeeList(info.file);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
+      info.file.status = "done";
+      setEmployeeList(info.file);
     },
     onDrop(e) {
       console.log("Dropped files", e.dataTransfer.files);
@@ -170,6 +165,7 @@ const SignupForm = () => {
           type="primary"
           htmlType="submit"
           style={{ width: "10vw", marginRight: "20px" }}
+          loading={loading}
         >
           Register
         </Button>
