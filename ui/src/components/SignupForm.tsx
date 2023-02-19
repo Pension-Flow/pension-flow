@@ -78,7 +78,7 @@ const SignupForm = () => {
       >
         <Input
           size="large"
-          placeholder="Name"
+          placeholder="Name of the company"
           style={{ marginTop: "4%" }}
           prefix={
             <UserOutlined
@@ -158,19 +158,22 @@ const SignupForm = () => {
           consists of column of employee wallet address
         </p>
       </Upload.Dragger>
-      <Form.Item>
+      <Form.Item
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: "2rem",
+        }}
+      >
         <Button
           type="primary"
           htmlType="submit"
-          style={{ width: "6vw", marginRight: "3%", marginTop: "0.8rem" }}
+          style={{ width: "10vw", marginRight: "20px" }}
         >
-          Sign Up
+          Register
         </Button>
-        <Button
-          htmlType="button"
-          onClick={onReset}
-          style={{ width: "6vw", marginTop: "0.8rem" }}
-        >
+        <Button htmlType="button" onClick={onReset} style={{ width: "10vw" }}>
           Reset
         </Button>
       </Form.Item>

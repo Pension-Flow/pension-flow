@@ -1,50 +1,24 @@
-import Head from "next/head";
-import LoginForm from "@/components/LoginForm";
+import { Content } from "antd/es/layout/layout";
+import { Typography } from "antd";
 import { Tabs } from "antd";
+const { Title } = Typography;
+
+import Head from "next/head";
 import SignupForm from "@/components/SignupForm";
-import ShowInvestCard from "@/components/ShowInvestCard";
-import ShowInvestmentDetails from "@/components/ShowInvestmentDetails";
-import InvestForm from "./InvestForm";
 
 export default function Home() {
   return (
     <>
       <Head>
-        <title>Login - Pension Flow</title>
+        <title>Register</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Tabs
-          size="large"
-          defaultActiveKey="1"
-          style={{ width: "30vw", margin: "2% auto 10%" }}
-        >
-          {/* <Tabs.TabPane tab="Login" key="1">
-            <LoginForm />
-          </Tabs.TabPane> */}
-          <Tabs.TabPane tab="Register Your Company" key="1">
-            <SignupForm />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Card Test" key="2">
-            <ShowInvestCard
-              title="Test 1"
-              content="Content 1"
-              deadline="deadline 1"
-            ></ShowInvestCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Details Component Test" key="3">
-            <ShowInvestmentDetails
-              title="Test 1"
-              content="Content 1"
-              deadline="deadline 1"
-              amount="100000"
-            ></ShowInvestmentDetails>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Invest" key="4">
-            <InvestForm />
-          </Tabs.TabPane>
-        </Tabs>
+        <Content style={{ width: "40vw", margin: "0 auto" }}>
+          <Title style={{ textAlign: "center" }}>Register Company</Title>
+          <SignupForm />
+        </Content>
       </main>
     </>
   );

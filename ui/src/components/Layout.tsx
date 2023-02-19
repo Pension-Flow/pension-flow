@@ -10,25 +10,23 @@ import { Layout, Menu, theme, Button } from "antd";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Typography } from "antd";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const { Title } = Typography;
 const { Header, Content, Sider } = Layout;
 
 const optionNames = [
-  "Dashboard",
   "Register Company",
-  // "Register Employee",
-  "Pension",
-  "Add Investment"
+  "Dashboard",
+  "Propose an Investment",
+  "View Investment Proposals",
 ];
 
 const optionRoutes = [
-  "/dashboard",
   "/register-company",
-  // "/register-employee",
-  "/pension",
-  "/add-investment"
-
+  "/dashboard",
+  "/propose-investment",
+  "/view-investment-proposals",
 ];
 // TODO ->  Edit the icons according to the above options
 
@@ -42,8 +40,8 @@ const CustomLayout = ({ children }: IProp) => {
   } = theme.useToken();
 
   const items2: MenuProps["items"] = [
-    DashboardOutlined,
     UserOutlined,
+    DashboardOutlined,
     LaptopOutlined,
     NotificationOutlined,
   ].map((icon, index) => {
@@ -62,7 +60,7 @@ const CustomLayout = ({ children }: IProp) => {
 
   return (
     <Layout style={{ height: "100vh", overflowY: "clip" }}>
-      <Header className="header">
+      <Header className="header" style={{ padding: "35px 20px" }}>
         <div
           style={{
             width: "100%",
@@ -72,16 +70,44 @@ const CustomLayout = ({ children }: IProp) => {
             height: "100%",
           }}
         >
-          {/* TODO -> MAKE IT MOBILE RESPONSIVE */}
-          <Title style={{ color: "white", marginTop: 3 }} level={2}>
-            Pension Flow
-          </Title>
+          <Link href="/">
+            <Title style={{ color: "white", marginTop: 8 }} level={2}>
+              Pension Flow
+            </Title>
+          </Link>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Button type="primary" htmlType="submit" style={{}}>
-              Login as employee
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{
+                width: "16vw",
+                padding: "19px 0",
+                borderRadius: 12,
+                fontSize: 16,
+                fontWeight: 600,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Login as Employee
             </Button>
-            <Button type="primary" htmlType="submit" style={{ margin: 10 }}>
-              Login as Company admin
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{
+                margin: 10,
+                width: "16vw",
+                padding: "19px 0",
+                borderRadius: 12,
+                fontSize: 16,
+                fontWeight: 600,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Login as Company
             </Button>
             <ConnectButton showBalance accountStatus={"address"} />
           </div>
@@ -89,7 +115,7 @@ const CustomLayout = ({ children }: IProp) => {
       </Header>
       <Layout>
         <Sider
-          width={200}
+          width={250}
           style={{ background: colorBgContainer }}
           theme="dark"
           collapsible

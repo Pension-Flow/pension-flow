@@ -22,7 +22,9 @@ struct Employee {
 
 // creating the Request struct definition
 struct CryptoProposal {
+    string title;
     string description;
+    uint256 deadline;
     uint256 value;
     address currencyAddress;
     bool complete;
@@ -30,7 +32,9 @@ struct CryptoProposal {
     mapping(address => bool) votes; // mapping for the people who have voted
 }
 struct W2wProposal {
+    string title;
     string description;
+    uint256 deadline;
     uint256 value;
     address payable targetAddress;
     bool complete;
@@ -183,14 +187,16 @@ contract Company is Initializable, OwnableUpgradeable {
      * @param _currencyAddress The currencyAddress of the proposal
      */
     function createCryptoProposal(
+        string memory _title,
         string memory _description,
+        uint256 _deadline,
         uint256 _value,
         address _currencyAddress
     ) public onlyOwner {
-        CryptoProposal storage newRequest = cryptoProposals[
-            noOfCryptoProposals++
-        ];
+        CryptoProposal storage newRequest = cryptoProposals[noOfCryptoProposals++];
+        newRequest.title = _title;
         newRequest.description = _description;
+        newRequest.deadline = _deadline;
         newRequest.value = _value;
         newRequest.currencyAddress = _currencyAddress;
         newRequest.complete = false;
@@ -204,12 +210,16 @@ contract Company is Initializable, OwnableUpgradeable {
      * @param _targetAddress The targetAddress of the proposal
      */
     function createW2wProposal(
+        string memory _title,
         string memory _description,
+        uint256 _deadline,
         uint256 _value,
         address payable _targetAddress
     ) public onlyOwner {
         W2wProposal storage newRequest = w2wProposals[noOfW2wProposals++];
+        newRequest.title = _title;
         newRequest.description = _description;
+        newRequest.deadline = _deadline;
         newRequest.value = _value;
         newRequest.targetAddress = _targetAddress;
         newRequest.complete = false;
@@ -222,7 +232,7 @@ contract Company is Initializable, OwnableUpgradeable {
      */
     function approveCryptoProposal(uint256 proposalIndex) public {
         // checking if the caller of the function is an approver or not
-        require(isAddressInEmployee(msg.sender));
+        require(isAddressInEmployee(msg.sender) && block.timestamp < cryptoProposals[proposalIndex].deadline);
 
         CryptoProposal storage currProposal = cryptoProposals[proposalIndex];
 
@@ -239,7 +249,7 @@ contract Company is Initializable, OwnableUpgradeable {
      */
     function approveW2wProposal(uint256 proposalIndex) public {
         // checking if the caller of the function is an approver or not
-        require(isAddressInEmployee(msg.sender));
+        require(isAddressInEmployee(msg.sender) && block.timestamp < w2wProposals[proposalIndex].deadline);
 
         W2wProposal storage currProposal = w2wProposals[proposalIndex];
 
