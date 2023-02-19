@@ -10,9 +10,12 @@ import {
   Checkbox,
   DatePickerProps,
 } from "antd";
+import { useCompany } from "@/hooks/useCompany";
 const { TextArea } = Input;
 
 function W2WInvestmentForm() {
+  const { companyContract } = useCompany();
+
   const [title, setTitle] = React.useState<string>("");
   const [recieverAddress, setRecieverAddress] = React.useState<string>("");
   const [amount, setAmount] = React.useState<number>(0);
@@ -21,6 +24,25 @@ function W2WInvestmentForm() {
 
   const onDateChange: DatePickerProps["onChange"] = (date, dateString) => {
     console.log(date, dateString);
+  };
+
+  const submitW2WProposalHandler = () => {
+    if (companyContract) {
+      companyContract
+        .createW2wProposal(
+          title,
+          proposal,
+          deadlineVote,
+          amount,
+          recieverAddress,
+        )
+        .then((res) => {
+          console.log("W2W PROPOSAL SUBMITTED", res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -67,7 +89,7 @@ function W2WInvestmentForm() {
             alignItems: "center",
           }}
         >
-          <Button>Submit Proposal</Button>
+          <Button onClick={submitW2WProposalHandler}>Submit Proposal</Button>
         </Form.Item>
       </Form>
     </div>
