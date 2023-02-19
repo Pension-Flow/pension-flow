@@ -17,13 +17,14 @@ export default async function handler(
       address: companyAddress,
     });
     if (!company) res.status(400).json("Company not found!");
+    const stringToNumber = (str: string) => parseInt(str, 10);
     for (let i = 0; i < employees.length; i++) {
       const employee = await Employee.create({
-        address: employees[i].address,
+        address: employees[i].employeeAddress,
         company: company._id,
         pensionStartDate: employees[i].pensionStartDate,
         pensionDuration: employees[i].pensionDuration,
-        monthlyAmount: employees[i].monthlyAmount,
+        monthlyAmount: stringToNumber(employees[i].monthlyAmount),
         employeeJoiningDate: employees[i].employeeJoiningDate,
         employeeLeavingDate: employees[i].employeeLeavingDate,
         minimumServiceRequired: employees[i].minimumServiceRequired,

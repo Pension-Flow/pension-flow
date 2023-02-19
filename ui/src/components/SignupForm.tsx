@@ -25,7 +25,7 @@ const SignupForm = () => {
     if (employeeList) {
       const companyAddress = await createCompany(values.name);
       addAddress(companyAddress);
-      await uploadCsv(employeeList);
+      await uploadCsv(employeeList, companyAddress);
     } else
       notification.error({
         message: "Error",
