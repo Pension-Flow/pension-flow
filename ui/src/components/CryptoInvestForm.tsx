@@ -14,6 +14,8 @@ import {
   DatePickerProps,
 } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import { useCompany } from "@/hooks/useCompany";
+import { getSolidityDate } from "@/lib/helper";
 const { TextArea } = Input;
 
 const currencySymbols = [
@@ -37,12 +39,13 @@ const items: MenuProps["items"] = currencySymbols.map((symbol, index) => {
 });
 
 function CryptoInvestForm() {
+  const { companyContract } = useCompany();
   const [title, setTitle] = React.useState<string>("");
   const [currencySymbol, setCurrencySymbol] = React.useState<string>(
     currencySymbols[0]
   );
   const [amount, setAmount] = React.useState<number>(0);
-  const [deadlineVote, setDeadlineVote] = React.useState<string>("");
+  const [deadlineVote, setDeadlineVote] = React.useState<any>("");
   const [proposal, setProposal] = React.useState<string>("");
 
   const onClick = ({ key }: any) => {
@@ -51,6 +54,24 @@ function CryptoInvestForm() {
 
   const onDateChange: DatePickerProps["onChange"] = (date, dateString) => {
     console.log(date, dateString);
+    setDeadlineVote(date);
+  };
+
+  const submitCryptoProposalHandler = async () => {
+    if (companyContract) {
+      try {
+        const res = await companyContract.createCryptoProposal(
+          title,
+          proposal,
+          getSolidityDate(deadlineVote),
+          amount,
+          currencySymbol
+        );
+        console.log("SUBMIT CRYPTO INVESTMENT: ", res);
+      } catch (err) {
+        console.log("ERROR WHILE SUBMITTING CRYPTO INVESTMENT: ", err);
+      }
+    }
   };
 
   return (
@@ -98,7 +119,7 @@ function CryptoInvestForm() {
             alignItems: "center",
           }}
         >
-          <Button>Submit Proposal</Button>
+          <Button onClick={submitCryptoProposalHandler}>Submit Proposal</Button>
         </Form.Item>
       </Form>
     </div>

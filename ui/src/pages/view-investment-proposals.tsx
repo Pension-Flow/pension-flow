@@ -1,15 +1,40 @@
 import InvestmentList from "@/components/InvestmentList";
+import { useCompany } from "@/hooks/useCompany";
 import { Tabs, Typography } from "antd";
 import { useEffect, useState } from "react";
 const { Title } = Typography;
 
 const ViewInvestmentProposals = () => {
+  const { companyContract } = useCompany();
+
   const [activeKey, setActiveKey] = useState("1");
   const [investments, setInvestments] = useState([]);
 
   useEffect(() => {
-    // fetch investments here
-  }, [activeKey]);
+    if (companyContract) {
+      if (activeKey === "1") {
+        companyContract
+          .cryptoProposals()
+          .then((res) => {
+            // setInvestments(res);
+            console.log("CRYPTO PROPOSAL", res);
+          })
+          .catch((err) => {
+            console.log("ERROR WHILE FETCHING CRYPTO PROPOSALS: ", err);
+          });
+      } else {
+        companyContract
+          .w2wProposals()
+          .then((res) => {
+            // setInvestments(res);
+            console.log("W2W PROPOSAL", res);
+          })
+          .catch((err) => {
+            console.log("ERROR WHILE FETCHING W2W PROPOSALS: ", err);
+          });
+      }
+    }
+  }, [activeKey, companyContract]);
 
   const tabItems = [
     {
