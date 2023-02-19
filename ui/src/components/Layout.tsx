@@ -18,16 +18,15 @@ const { Header, Content, Sider } = Layout;
 const optionNames = [
   "Register Company",
   "Dashboard",
-  "Pension",
-  "Add Investment",
+  "Propose an Investment",
+  "View Investment Proposals",
 ];
 
 const optionRoutes = [
   "/register-company",
   "/dashboard",
-  // "/register-employee",
-  "/pension",
-  "/add-investment",
+  "/propose-investment",
+  "/view-investment-proposals",
 ];
 // TODO ->  Edit the icons according to the above options
 
@@ -41,10 +40,10 @@ const CustomLayout = ({ children }: IProp) => {
   } = theme.useToken();
 
   const items2: MenuProps["items"] = [
-    DashboardOutlined,
     UserOutlined,
+    DashboardOutlined,
     LaptopOutlined,
-    NotificationOutlined,
+    // NotificationOutlined,
   ].map((icon, index) => {
     const key: String = String(index + 1);
 
@@ -116,7 +115,7 @@ const CustomLayout = ({ children }: IProp) => {
       </Header>
       <Layout>
         <Sider
-          width={200}
+          width={230}
           style={{ background: colorBgContainer }}
           theme="dark"
           collapsible
