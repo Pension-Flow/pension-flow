@@ -4,6 +4,7 @@ import { Tabs } from "antd";
 import SignupForm from "@/components/SignupForm";
 import ShowInvestCard from "@/components/ShowInvestCard";
 import ShowInvestmentDetails from "@/components/ShowInvestmentDetails";
+import InvestForm from "./InvestForm";
 
 export default function Home() {
   return (
@@ -19,10 +20,10 @@ export default function Home() {
           defaultActiveKey="1"
           style={{ width: "30vw", margin: "2% auto 10%" }}
         >
-          <Tabs.TabPane tab="Login" key="1">
+          {/* <Tabs.TabPane tab="Login" key="1">
             <LoginForm />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Sign Up" key="2">
+          </Tabs.TabPane> */}
+          <Tabs.TabPane tab="Register Your Company" key="2">
             <SignupForm />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Card Test" key="3">
@@ -39,6 +40,9 @@ export default function Home() {
               deadline="deadline 1"
               amount="100000"
             ></ShowInvestmentDetails>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Invest" key="3">
+            <InvestForm />
           </Tabs.TabPane>
         </Tabs>
       </main>

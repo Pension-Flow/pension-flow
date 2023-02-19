@@ -7,21 +7,25 @@ import {
   message,
   UploadProps,
   UploadFile,
+  notification,
 } from "antd";
-import {
-  UserOutlined,
-  LockOutlined,
-  MailOutlined,
-  InboxOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, InboxOutlined } from "@ant-design/icons";
+import { useCompany } from "@/hooks/useCompany";
 
 const SignupForm = () => {
   const [form] = Form.useForm();
-  const [banner, setBanner] = useState<UploadFile<any> | File>();
+  const [employeeList, setEmployeeList] = useState<UploadFile<any> | File>();
+  const { companyContract, uploadCsv } = useCompany();
 
   const onFinish = (values: any) => {
     console.log(values);
-    console.log(banner);
+    console.log(employeeList);
+    if (employeeList) uploadCsv(employeeList);
+    else
+      notification.error({
+        message: "Error",
+        description: "Please upload employee list",
+      });
   };
 
   const onReset = () => {
@@ -32,6 +36,7 @@ const SignupForm = () => {
     name: "file",
     multiple: false,
     maxCount: 1,
+    accept: ".csv",
     onChange(info) {
       const { status } = info.file;
       if (status !== "uploading") {
@@ -39,28 +44,19 @@ const SignupForm = () => {
       }
       if (status === "done") {
         message.success(`${info.file.name} file uploaded successfully.`);
-        setBanner(info.file);
+        setEmployeeList(info.file);
       } else if (status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
     },
     onDrop(e) {
       console.log("Dropped files", e.dataTransfer.files);
-      setBanner(e.dataTransfer.files[0]);
+      setEmployeeList(e.dataTransfer.files[0]);
     },
   };
 
   return (
     <Form form={form} name="control-hooks" onFinish={onFinish}>
-      <Upload.Dragger {...uploadProps}>
-        <p className="ant-upload-drag-icon">
-          <InboxOutlined />
-        </p>
-        <p className="ant-upload-text">Company Banner</p>
-        <p className="ant-upload-hint">
-          Click or drag file to this area to upload
-        </p>
-      </Upload.Dragger>
       <Form.Item
         name="name"
         rules={[
@@ -89,7 +85,7 @@ const SignupForm = () => {
           }
         />
       </Form.Item>
-      <Form.Item
+      {/* <Form.Item
         name="email"
         rules={[
           { required: true, message: "Email is required" },
@@ -111,8 +107,8 @@ const SignupForm = () => {
             />
           }
         />
-      </Form.Item>
-      <Form.Item
+      </Form.Item> */}
+      {/* <Form.Item
         name="password"
         rules={[
           {
@@ -133,8 +129,8 @@ const SignupForm = () => {
               "Password must contain at least one uppercase letter, one lowercase letter and one number",
           },
         ]}
-      >
-        <Input.Password
+      > */}
+      {/* <Input.Password
           size="large"
           placeholder="Password"
           prefix={
@@ -146,7 +142,17 @@ const SignupForm = () => {
             />
           }
         />
-      </Form.Item>
+      </Form.Item> */}
+      <Upload.Dragger {...uploadProps}>
+        <p className="ant-upload-drag-icon">
+          <InboxOutlined />
+        </p>
+        <p className="ant-upload-text">Employee List</p>
+        <p className="ant-upload-hint">
+          Click or drag a .csv file to this area to upload. Make sure the file
+          consists of column of employee wallet address
+        </p>
+      </Upload.Dragger>
       <Form.Item>
         <Button
           type="primary"
