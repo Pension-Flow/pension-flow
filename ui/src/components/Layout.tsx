@@ -17,15 +17,18 @@ const { Header, Content, Sider } = Layout;
 const optionNames = [
   "Dashboard",
   "Register Company",
-  "Register Employee",
+  // "Register Employee",
   "Pension",
+  "Add Investment"
 ];
 
 const optionRoutes = [
   "/dashboard",
   "/register-company",
-  "/register-employee",
+  // "/register-employee",
   "/pension",
+  "/add-investment"
+
 ];
 // TODO ->  Edit the icons according to the above options
 
